@@ -1,0 +1,57 @@
+.before-btn,
+.next-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+.before-btn {
+  left: 10px;
+}
+
+.next-btn {
+  right: 10px;
+}
+
+#responseText {
+    padding: 10px; /* Add padding around the response text */
+    border: 1px solid #ccc; /* Optional: Add a border for better visibility */
+    background-color: #f9f9f9; /* Optional: Add a background color */
+    border-radius: 5px; /* Optional: Add rounded corners */
+}
+#bottomMenu {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); /* Responsive grid layout */
+    gap: 10px; /* Add spacing between grid items */
+    padding: 10px; /* Add padding around the grid */
+    background-color: #f1f1f1; /* Optional: Add a background color */
+}
+
+.grid-item {
+    text-align: center; /* Center-align text */
+    border: 1px solid #ccc; /* Optional: Add a border for each item */
+    border-radius: 5px; /* Optional: Add rounded corners */
+    padding: 10px; /* Add padding inside each grid item */
+    background-color: #fff; /* Optional: Add a background color for each item */
+}
+
+.grid-item img {
+    width: 100%; /* Make images responsive */
+    height: auto; /* Maintain aspect ratio */
+    margin-bottom: 5px; /* Add spacing below the image */
+}
+
+.grid-item .name {
+    font-weight: bold; /* Highlight the name */
+    margin-bottom: 5px; /* Add spacing below the name */
+}
+
+.grid-item .price {
+    color: #007b00; /* Optional: Add a color for the price */
+    font-size: 1.1em; /* Optional: Increase font size for the price */
+}

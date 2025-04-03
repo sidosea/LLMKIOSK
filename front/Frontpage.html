@@ -9,84 +9,64 @@
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     </head>
     <body>
-        <!--사진을 여러장 보여주는 슬라이드 컨테이너(캐러셀)-->
-        <div style="overflow: hidden">
-            <div class="slide-container">
-                <div class="slide-box">
-                    <img src="car1.png" />
+        <!-- 상단 로고 및 언어 선택 -->
+        <div class="top-bar d-flex justify-content-between align-items-center p-3">
+            <div class="logo"><img src="logo.png" /></div>
+            <button class="btn btn-light">🌍 언어 변경</button>
+        </div>
+
+        <!-- 캐러셀 광고 슬라이드 -->
+        <div class="carousel-wrapper d-flex justify-content-center">
+            <div class="carousel-container position-relative">
+                <button class="before-btn">◃</button>
+                <div class="slide-container">
+                    <div class="slide-box"><img src="carousel1.jpg" /></div>
+                    <div class="slide-box"><img src="carousel2.jpg" /></div>
+                    <div class="slide-box"><img src="carousel3.jpg" /></div>
                 </div>
-                <div class="slide-box">
-                    <img src="car2.png" />
-                </div>
-                <div class="slide-box">
-                    <img src="car3.png" />
-                </div>
+                <button class="next-btn">▹</button>
             </div>
         </div>
-        <!--다음/이전버튼으로 바꾸기-->
-        <button class="before-btn">◃</button>
-        <button class="next-btn">▹</button>
 
-        <!--버튼 스크립트-->
+        <!-- 입력창 -->
+        <div class="container text-center mt-4">
+            <h2 class="mb-3">주문을 입력해주세요</h2>
+            <div class="input-group mb-3">
+                <input type="text" id="textInput" class="form-control" placeholder="시원한 아메리카노 한잔 어떠세요?" />
+                <button class="btn btn-secondary" id="voiceBtn">🎤</button>
+            </div>
+            <button id="sendBtn" class="btn btn-primary btn-lg">🛒 지금 주문하기</button>
+            <p id="responseText" class="mt-3">서버로부터 응답 대기중</p>
+        </div>
+
+        <!-- JavaScript -->
         <script>
-            // 현재 슬라이드 상태를 저장하는 변수
             let btn_state = 0;
-
-            // 슬라이드 박스의 총 개수 (슬라이드가 몇 개인지 계산)
+            const slideContainer = document.querySelector(".slide-container");
             const totalSlides = document.querySelectorAll(".slide-box").length;
+            const slideWidth = 260; // 개별 슬라이드 크기
 
-            // 다음 버튼 클릭 이벤트
             document.querySelector(".next-btn").addEventListener("click", function () {
                 if (btn_state < totalSlides - 1) {
-                    btn_state++; // 상태 증가
+                    btn_state++;
                     updateSlidePosition();
                 }
             });
 
-            // 이전 버튼 클릭 이벤트
             document.querySelector(".before-btn").addEventListener("click", function () {
                 if (btn_state > 0) {
-                    btn_state--; // 상태 감소
+                    btn_state--;
                     updateSlidePosition();
                 }
             });
 
-            // 슬라이드 이동 함수
             function updateSlidePosition() {
-                const slideContainer = document.querySelector(".slide-container");
-                slideContainer.style.transform = `translateX(-${btn_state * 100}vw)`;
+                slideContainer.style.transform = `translateX(-${btn_state * 260}px)`;
             }
-        </script>
 
-        <div class="container text-center">
-            <h2 class="mb-4">주문을 입력해주세요</h2>
-            <input
-                type="text"
-                id="textInput"
-                class="form-control mb-3"
-                placeholder="시원한 아메리카노 한잔 어떠세요?" />
-            <button id="sendBtn" class="btn btn-primary">전송</button>
-            <p id="responseText" class="mt-3"></p>
-        </div>
-        <div id="bottomMenu">
-            <!-- 예시 아이템 -->
-            <div class="grid-item">
-                <img src="car1.png" alt="Item 1" />
-                <div class="name">Item 1</div>
-                <div class="price">$10.00</div>
-            </div>
-            <div class="grid-item">
-                <img src="car2.png" alt="Item 2" />
-                <div class="name">Item 2</div>
-                <div class="price">$15.00</div>
-            </div>
-            <!-- 더 많은 아이템이 여기에 추가될 수 있음 -->
-        </div>
-
-        <script>
             function sendText() {
-                let text = $("#textInput").val().trim(); // 입력 값 가져오기
-                if (text === "") return; // 빈 값이면 실행 안 함
+                let text = $("#textInput").val().trim();
+                if (text === "") return;
 
                 $.ajax({
                     url: "http://localhost:5000/send_text",
@@ -94,13 +74,8 @@
                     contentType: "application/json",
                     data: JSON.stringify({ text: text }),
                     success: function (response) {
-                        $("#responseText").text(response.message); // 서버 응답 표시
-                        $("#textInput").val(""); // 입력창 비우기
-
-                        // 서버 응답 데이터로 하단 메뉴 업데이트
-                        if (response.items && Array.isArray(response.items)) {
-                            updateBottomMenu(response.items);
-                        }
+                        $("#responseText").text(response.message);
+                        $("#textInput").val("");
                     },
                     error: function () {
                         $("#responseText").text("서버와 연결할 수 없습니다.");
@@ -108,30 +83,9 @@
                 });
             }
 
-            // 하단 메뉴 업데이트 함수
-            function updateBottomMenu(items) {
-                const bottomMenu = $("#bottomMenu");
-                bottomMenu.empty(); // 기존 메뉴 초기화
-
-                items.forEach((item) => {
-                    const gridItem = `
-            <div class="grid-item">
-                <img src="${item.image}" alt="${item.name}">
-                <div class="name">${item.name}</div>
-                <div class="price">${item.price}</div>
-            </div>
-        `;
-                    bottomMenu.append(gridItem); // 새로운 아이템 추가
-                });
-            }
-
-            // 버튼 클릭 시 전송
             $("#sendBtn").click(sendText);
-
-            // 엔터 키로 전송
             $("#textInput").keypress(function (event) {
                 if (event.which === 13) {
-                    // Enter 키 코드 (13)
                     event.preventDefault();
                     sendText();
                 }
