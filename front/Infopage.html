@@ -1,44 +1,60 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>##카페</title>
-        <link href="Detail2.css" rel="stylesheet" />
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    </head>
-    <body>
-            <div id="bottomMenu">
-            <!-- 예시 아이템 -->
-            <div class="grid-item">
-                <img src="car1.png" alt="Item 1" />
-                <div class="name">Item 1</div>
-                <div class="price">$10.00</div>
-            </div>
-            <div class="grid-item">
-                <img src="car2.png" alt="Item 2" />
-                <div class="name">Item 2</div>
-                <div class="price">$15.00</div>
-            </div>
-            <!-- 더 많은 아이템이 여기에 추가될 수 있음 -->
-        </div>
-        <script>            // 하단 메뉴 업데이트 함수
-            function updateBottomMenu(items) {
-                const bottomMenu = $("#bottomMenu");
-                bottomMenu.empty(); // 기존 메뉴 초기화
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Menu Board with Cart</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/Detail2.css">
+</head>
+<body>
 
-                items.forEach((item) => {
-                    const gridItem = `
-            <div class="grid-item">
-                <img src="${item.image}" alt="${item.name}">
-                <div class="name">${item.name}</div>
-                <div class="price">${item.price}</div>
-            </div>
-        `;
-                    bottomMenu.append(gridItem); // 새로운 아이템 추가
-                });
-            }
-        </script>
-    </body>
+<!-- 상단바 -->
+<nav class="navbar navbar-light bg-light">
+  <div class="container">
+    <a class="navbar-brand" href="#">📋메뉴</a>
+    <button class="btn btn-primary position-relative" id="cart-button">
+      🛒 장바구니 <span class="badge bg-danger" id="cart-count">0</span>
+    </button>
+  </div>
+</nav>
+
+<!-- 메뉴 그리드 -->
+<div class="container py-5" id="menu-container">
+  <div class="row" id="menu-grid"></div>
+</div>
+
+<!-- 장바구니 모달 -->
+<div class="modal fade" id="cartModal" tabindex="-1" aria-labelledby="cartModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="cartModalLabel">🛒 장바구니</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" id="cart-items"></div>
+      <div class="modal-footer">
+        <h5 class="me-auto" id="cart-total">총액: \00</h5>
+        <button type="button" class="btn btn-secondary" id="clear-cart">전부 비우기</button>
+        <button type="button" class="btn btn-success">결제하기</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 토스트 알림 -->
+<div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+  <div id="toast" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="d-flex">
+      <div class="toast-body">
+        🛒 장바구니에 담겼습니다!
+      </div>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="menu_script.js"></script>
+</body>
 </html>

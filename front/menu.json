@@ -1,0 +1,19 @@
+[
+  { "name": "Americano", "image": "americano.jpg", "price": 4000 },
+  { "name": "Caramel", "image": "caramel.jpg", "price": 5500 },
+  { "name": "Caramel Snupy", "image": "caramel_snupy.jpg", "price": 6000 },
+  { "name": "Chamomile", "image": "chamomile.jpg", "price": 5000 },
+  { "name": "Citrus", "image": "citrus.jpg", "price": 5050 },
+  { "name": "Grapefruit Black Tea", "image": "grapefruit_black_tea.jpg", "price": 5500 },
+  { "name": "Hibiscus Tea", "image": "hibiscus_tea.jpg", "price": 5000 },
+  { "name": "Latte Cream", "image": "latte_cream.jpg", "price": 6000 },
+  { "name": "Lavender", "image": "lavender.png", "price": 6000 },
+  { "name": "Malcha Frappe", "image": "malcha_frap.jpg", "price": 6000 },
+  { "name": "Malcha Latte", "image": "malcha_latte.jpg", "price": 6000 },
+  { "name": "Mango Passion Tea", "image": "mango_passion_tea.jpg", "price": 5500 },
+  { "name": "Milk Classic Tea", "image": "milk_classic_tea.jpg", "price": 5500 },
+  { "name": "Nitro Vanilla", "image": "nitro_vanila.jpg", "price": 6500 },
+  { "name": "Strawberry Glaze", "image": "strawberry_glazed.jpg", "price": 6000 },
+  { "name": "Strawberry Latte", "image": "strawberry_latte.jpg", "price": 6000 },
+  { "name": "White Choco", "image": "whitechoco.jpg", "price": 6000 }
+]
