@@ -1,27 +1,45 @@
-/*아직 정상작동중인  맥북 파일로 되돌리기 */
+/* 아직 정상작동중인 맥북 파일로 되돌리기 */
 #responseText {
-    padding: 10px; /* Add padding around the response text */
-    border: 1px solid #ccc; /* Optional: Add a border for better visibility */
-    background-color: #f9f9f9; /* Optional: Add a background color */
-    border-radius: 5px; /* Optional: Add rounded corners */
+    padding: 20px;
+    border: 1px solid #444;
+    background: linear-gradient(145deg, #3c3c3c, #2e2e2e);
+    border-radius: 12px;
+    color: #f0f0f0;
+    font-size: 1.1rem;
+    text-align: center;
+    margin-top: 30px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.5);
 }
+
 body {
-    background-color: #343232; /* 전체 배경 회색 */
+    background-color: #2e2e2e; /* 더 다크한 회색 */
+    font-family: 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+    color: #f1f1f1;
+    margin: 0;
+    padding: 0;
 }
+
+/* 캐러셀 */
 .carousel-container {
     display: flex;
     justify-content: center;
     align-items: center;
     position: relative;
-    margin-top: 20px;
-    width: 260px;
+    margin: 30px auto;
+    width: 260px; /* 보이는 영역은 1장 크기 고정 */
+    height: 260px;
     overflow: hidden;
+    border-radius: 20px;
+    box-shadow: 0 6px 12px rgba(0,0,0,0.6);
 }
+
 .slide-container {
     display: flex;
+    width: calc(260px * 3); /* 슬라이드 총 갯수 × 한 장 크기 */
+    transform: translateX(0); /* 시작은 0 */
     transition: transform 0.5s ease-in-out;
-    width: 100%;
 }
+
 .slide-box {
     width: 260px;
     height: 260px;
@@ -29,27 +47,94 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
+
 .slide-box img {
-    width: 260px;
-    height: 260px;
+    width: 100%;
+    height: 100%;
     object-fit: cover;
+    border-radius: 20px;
 }
+
+
+
+/* 버튼 */
 .before-btn,
 .next-btn {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    background-color: rgba(0, 0, 0, 0.5);
-    color: white;
+    background: rgba(50, 50, 50, 0.7);
+    color: #fff;
     border: none;
-    padding: 10px;
+    padding: 10px 14px;
+    border-radius: 50%;
     cursor: pointer;
     z-index: 10;
+    transition: background 0.3s, transform 0.2s;
+}
+.before-btn:hover,
+.next-btn:hover {
+    background: rgba(70, 70, 70, 0.9);
+    transform: translateY(-50%) scale(1.1);
 }
 .before-btn {
-    left: 5px;
+    left: 10px;
 }
 .next-btn {
-    right: 5px;
+    right: 10px;
+}
+
+/* 입력창 */
+.input-group {
+    display: flex;
+    max-width: 600px;
+    margin: 40px auto 20px auto;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+    border-radius: 12px;
+    overflow: hidden;
+}
+.input-group input {
+    flex: 1;
+    background-color: #3a3a3a;
+    color: #fff;
+    border: none;
+    padding: 14px 18px;
+    font-size: 1rem;
+}
+.input-group input::placeholder {
+    color: #bbb;
+}
+.input-group .btn {
+    background-color: #5a5a5a;
+    color: #fff;
+    border: none;
+    padding: 14px 20px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+.input-group .btn:hover {
+    background-color: #777;
+}
+
+/* 주문 / 메뉴 버튼 */
+#sendBtn, #menuBtn {
+    background: linear-gradient(145deg, #505050, #3c3c3c);
+    color: #fff;
+    border: none;
+    padding: 15px 40px;
+    margin: 20px 10px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    border-radius: 18px;
+    box-shadow: 0 6px 10px rgba(0,0,0,0.5);
+    transition: all 0.3s ease;
+}
+#sendBtn:hover, #menuBtn:hover {
+    background: linear-gradient(145deg, #606060, #4a4a4a);
+    transform: translateY(-3px);
 }
