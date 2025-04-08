@@ -33,7 +33,48 @@
   </div>
 </div>
 
+<!-- 부트스트랩 및 스크립트 로드 -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- 장바구니 데이터를 읽고 화면에 출력하는 스크립트 -->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // URL에서 cart 파라미터 가져오기
+    const urlParams = new URLSearchParams(window.location.search);
+    const cartParam = urlParams.get('cart');
+
+    if (!cartParam) {
+      document.getElementById('order-summary').innerHTML = '<li class="list-group-item">장바구니가 비어 있습니다.</li>';
+      return;
+    }
+
+    // cart 데이터 디코딩 및 파싱
+    const cart = JSON.parse(decodeURIComponent(cartParam));
+
+    const orderSummary = document.getElementById('order-summary');
+    let totalPrice = 0;
+
+    // 장바구니 항목을 리스트로 추가
+    for (const [name, item] of Object.entries(cart)) {
+      const itemTotal = item.price * item.quantity;
+      totalPrice += itemTotal;
+
+      const listItem = document.createElement('li');
+      listItem.className = 'list-group-item d-flex justify-content-between align-items-center';
+      listItem.innerHTML = `
+        <div>
+          <strong>${name}</strong> (${item.quantity}개)
+        </div>
+        <div>₩${itemTotal.toLocaleString()}</div>
+      `;
+      orderSummary.appendChild(listItem);
+    }
+
+    // 총액 업데이트
+    document.getElementById('total-price').textContent = `총액: ₩${totalPrice.toLocaleString()}`;
+  });
+</script>
+
 <script src="payment_script.js"></script>
 </body>
 </html>

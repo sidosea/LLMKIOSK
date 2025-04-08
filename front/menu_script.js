@@ -2,12 +2,12 @@
 const cart = {};
 
 // 📦 요소 가져오기
-const menuGrid = document.getElementById('menu-grid');
-const cartCount = document.getElementById('cart-count');
-const cartItems = document.getElementById('cart-items');
-const cartTotal = document.getElementById('cart-total');
-const toastLive = document.getElementById('toast');
-const toastBootstrap = new bootstrap.Toast(toastLive);
+const $menuGrid = $('#menu-grid');
+const $cartCount = $('#cart-count');
+const $cartItems = $('#cart-items');
+const $cartTotal = $('#cart-total');
+const $toastLive = $('#toast');
+const toastBootstrap = new bootstrap.Toast($toastLive[0]);
 
 // 📄 메뉴 로드
 async function loadMenu() {
@@ -23,20 +23,24 @@ function formatPrice(price) {
 
 // 🍔 메뉴 출력
 function renderMenu(menuItems) {
-  menuItems.forEach(item => {
-    const col = document.createElement('div');
-    col.className = 'col-6 col-md-4 col-lg-3 mb-4';
-    col.innerHTML = `
-      <div class="card h-100 shadow-sm menu-card" style="cursor:pointer;">
-        <img src="img/${item.image}" class="card-img-top" alt="${item.name}">
-        <div class="card-body text-center">
-          <h5 class="card-title mb-2">${item.name}</h5>
-          <p class="card-text text-primary fw-bold">${formatPrice(item.price)}</p>
+  $.each(menuItems, function(_, item) {
+    const $col = $(`
+      <div class="col-6 col-md-4 col-lg-3 mb-4">
+        <div class="card h-100 shadow-sm menu-card" style="cursor:pointer;">
+          <img src="img/${item.image}" class="card-img-top" alt="${item.name}">
+          <div class="card-body text-center">
+            <h5 class="card-title mb-2">${item.name}</h5>
+            <p class="card-text text-primary fw-bold">${formatPrice(item.price)}</p>
+          </div>
         </div>
       </div>
-    `;
-    col.querySelector('.card').addEventListener('click', () => addToCart(item));
-    menuGrid.appendChild(col);
+    `);
+
+    $col.find('.card').on('click', function() {
+      addToCart(item);
+    });
+
+    $menuGrid.append($col);
   });
 }
 
@@ -45,7 +49,7 @@ function addToCart(item) {
   if (cart[item.name]) {
     cart[item.name].quantity += 1;
   } else {
-    cart[item.name] = { ...item, quantity: 1 }; // 가격, 이미지 다 저장
+    cart[item.name] = { ...item, quantity: 1 };
   }
   updateCart();
   showToast(item.name);
@@ -80,58 +84,84 @@ function removeFromCart(name) {
 
 // 🧹 장바구니 비우기
 function clearCart() {
-  Object.keys(cart).forEach(name => delete cart[name]);
+  for (let name in cart) {
+    delete cart[name];
+  }
   updateCart();
 }
 
 // 🔄 장바구니 업데이트
 function updateCart() {
-  cartItems.innerHTML = '';
+  $cartItems.empty();
   let total = 0;
   let count = 0;
 
-  for (const [name, item] of Object.entries(cart)) {
+  $.each(cart, function(name, item) {
     const itemTotal = item.price * item.quantity;
     total += itemTotal;
     count += item.quantity;
 
-    const itemDiv = document.createElement('div');
-    itemDiv.className = "d-flex justify-content-between align-items-center mb-3";
-    itemDiv.innerHTML = `
-      <div class="d-flex align-items-center">
-        <img src="img/${item.image}" alt="${name}" class="cart-item-image me-2" style="width: 40px; height: 40px; object-fit: cover;">
-        <div>
-          <div>${name}</div>
-          <div class="text-muted small">${formatPrice(item.price)} x ${item.quantity}</div>
+    const $itemDiv = $(`
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <div class="d-flex align-items-center">
+          <img src="img/${item.image}" alt="${name}" class="cart-item-image me-2" style="width: 40px; height: 40px; object-fit: cover;">
+          <div>
+            <div>${name}</div>
+            <div class="text-muted small">${formatPrice(item.price)} x ${item.quantity}</div>
+          </div>
+        </div>
+        <div class="d-flex align-items-center">
+          <button class="btn btn-sm btn-outline-secondary me-2 decrease-btn" data-name="${name}">-</button>
+          <button class="btn btn-sm btn-outline-secondary me-2 increase-btn" data-name="${name}">+</button>
+          <button class="btn btn-sm btn-danger remove-btn" data-name="${name}">삭제</button>
         </div>
       </div>
-      <div class="d-flex align-items-center">
-        <button class="btn btn-sm btn-outline-secondary me-2" onclick="decreaseQuantity('${name}')">-</button>
-        <button class="btn btn-sm btn-outline-secondary me-2" onclick="increaseQuantity('${name}')">+</button>
-        <button class="btn btn-sm btn-danger" onclick="removeFromCart('${name}')">삭제</button>
-      </div>
-    `;
-    cartItems.appendChild(itemDiv);
-  }
+    `);
 
-  cartTotal.textContent = total > 0 ? `총액: ${formatPrice(total)}` : '장바구니가 비었습니다';
-  cartCount.textContent = count;
+    $cartItems.append($itemDiv);
+  });
+
+  $cartTotal.text(total > 0 ? `총액: ${formatPrice(total)}` : '장바구니가 비었습니다');
+  $cartCount.text(count);
 }
 
 // 🔔 담겼을 때 토스트 보여주기
 function showToast(itemName) {
-  document.querySelector('#toast .toast-body').textContent = `🛒 ${itemName}가(이) 장바구니에 담겼습니다!`;
+  $('#toast .toast-body').text(`🛒 ${itemName}가(이) 장바구니에 담겼습니다!`);
   toastBootstrap.show();
 }
 
 // 🛍️ 모달 열기
-document.getElementById('cart-button').addEventListener('click', () => {
-  const cartModal = new bootstrap.Modal(document.getElementById('cartModal'));
+$('#cart-button').on('click', function() {
+  const cartModal = new bootstrap.Modal($('#cartModal')[0]);
   cartModal.show();
 });
 
 // 🧹 초기화 버튼
-document.getElementById('clear-cart').addEventListener('click', clearCart);
+$('#clear-cart').on('click', clearCart);
+
+// ➖➕❌ 수량 조절, 삭제 버튼
+$cartItems.on('click', '.decrease-btn', function() {
+  const name = $(this).data('name');
+  decreaseQuantity(name);
+});
+$cartItems.on('click', '.increase-btn', function() {
+  const name = $(this).data('name');
+  increaseQuantity(name);
+});
+$cartItems.on('click', '.remove-btn', function() {
+  const name = $(this).data('name');
+  removeFromCart(name);
+});
+
+// 💳 결제하기 버튼
+$('.btn-success').on('click', function() {
+  // 장바구니 정보를 JSON으로 직렬화
+  const cartData = encodeURIComponent(JSON.stringify(cart));
+  window.location.href = `paymentpage.html?cart=${cartData}`;
+});
 
 // 🚀 메뉴 처음 불러오기
-loadMenu();
+$(document).ready(function() {
+  loadMenu();
+});
