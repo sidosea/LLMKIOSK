@@ -42,55 +42,70 @@
 
         <!-- JavaScript -->
         <script>
-            let btn_state = 0;
-            const slideContainer = document.querySelector(".slide-container");
-            const totalSlides = document.querySelectorAll(".slide-box").length;
-            const slideWidth = 260; // 개별 슬라이드 크기
+    let btn_state = 0;
+    const slideContainer = document.querySelector(".slide-container");
+    const slides = document.querySelectorAll(".slide-box");
+    const totalSlides = slides.length;
+    const slideWidth = 260; // 개별 슬라이드 크기
 
-            document.querySelector(".next-btn").addEventListener("click", function () {
-                if (btn_state < totalSlides - 1) {
-                    btn_state++;
-                    updateSlidePosition();
-                }
-            });
+    // 버튼 클릭 이벤트
+    document.querySelector(".next-btn").addEventListener("click", function () {
+        btn_state++;
+        if (btn_state >= totalSlides) {
+            btn_state = 0; // 끝까지 가면 처음으로
+        }
+        updateSlidePosition();
+    });
 
-            document.querySelector(".before-btn").addEventListener("click", function () {
-                if (btn_state > 0) {
-                    btn_state--;
-                    updateSlidePosition();
-                }
-            });
+    document.querySelector(".before-btn").addEventListener("click", function () {
+        btn_state--;
+        if (btn_state < 0) {
+            btn_state = totalSlides - 1; // 처음에서 왼쪽 가면 마지막으로
+        }
+        updateSlidePosition();
+    });
 
-            function updateSlidePosition() {
-                slideContainer.style.transform = `translateX(-${btn_state * 260}px)`;
+    function updateSlidePosition() {
+        slideContainer.style.transform = `translateX(-${btn_state * slideWidth}px)`;
+        slideContainer.style.transition = "transform 0.5s ease"; // 부드럽게 이동
+    }
+
+    // 자동 슬라이드 기능
+    setInterval(function () {
+        btn_state++;
+        if (btn_state >= totalSlides) {
+            btn_state = 0;
+        }
+        updateSlidePosition();
+    }, 3000); // 3초마다 자동 이동
+
+    function sendText() {
+        let text = $("#textInput").val().trim();
+        if (text === "") return;
+
+        $.ajax({
+            url: "http://localhost:5000/send_text",
+            type: "POST",
+            contentType: "application/json",
+            data: JSON.stringify({ text: text }),
+            success: function (response) {
+                $("#responseText").text(response.message);
+                $("#textInput").val("");
+            },
+            error: function () {
+                $("#responseText").text("서버와 연결할 수 없습니다.");
             }
+        });
+    }
 
-            function sendText() {
-                let text = $("#textInput").val().trim();
-                if (text === "") return;
+    $("#sendBtn").click(sendText);
+    $("#textInput").keypress(function (event) {
+        if (event.which === 13) {
+            event.preventDefault();
+            sendText();
+        }
+    });
+</script>
 
-                $.ajax({
-                    url: "http://localhost:5000/send_text",
-                    type: "POST",
-                    contentType: "application/json",
-                    data: JSON.stringify({ text: text }),
-                    success: function (response) {
-                        $("#responseText").text(response.message);
-                        $("#textInput").val("");
-                    },
-                    error: function () {
-                        $("#responseText").text("서버와 연결할 수 없습니다.");
-                    }
-                });
-            }
-
-            $("#sendBtn").click(sendText);
-            $("#textInput").keypress(function (event) {
-                if (event.which === 13) {
-                    event.preventDefault();
-                    sendText();
-                }
-            });
-        </script>
     </body>
 </html>
