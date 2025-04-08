@@ -1,0 +1,15 @@
+.menu-card {
+  transition: transform 0.3s;
+}
+
+.menu-card:hover {
+  transform: scale(1.05);
+}
+
+#cart-button {
+  font-weight: bold;
+}
+
+.toast {
+  min-width: 200px;
+}
