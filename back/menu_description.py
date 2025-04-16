@@ -14,7 +14,8 @@ def generate_description(menu_name):
     prompt = f"'{menu_name}'라는 음료 메뉴에 대해 스타벅스 스타일로 한 줄 설명을 해줘. 고객이 어떤 음료인지 잘 이해할 수 있게 간단하고 자연스럽게 설명해줘."
     try:
         response = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",
+            model="gpt-3.5-turbo", # 모델 선택
+            max_tokens=100,  # 최대 토큰 수, 과부하 방지
             messages=[
                 {"role": "system", "content": "당신은 메뉴 설명을 잘하는 바리스타입니다."},
                 {"role": "user", "content": prompt}
