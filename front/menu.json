@@ -1,19 +1,20 @@
 [
-  { "name": "Americano", "image": "americano.jpg", "price": 4000 },
-  { "name": "Caramel", "image": "caramel.jpg", "price": 5500 },
-  { "name": "Caramel Snupy", "image": "caramel_snupy.jpg", "price": 6000 },
-  { "name": "Chamomile", "image": "chamomile.jpg", "price": 5000 },
-  { "name": "Citrus", "image": "citrus.jpg", "price": 5050 },
-  { "name": "Grapefruit Black Tea", "image": "grapefruit_black_tea.jpg", "price": 5500 },
-  { "name": "Hibiscus Tea", "image": "hibiscus_tea.jpg", "price": 5000 },
-  { "name": "Latte Cream", "image": "latte_cream.jpg", "price": 6000 },
-  { "name": "Lavender", "image": "lavender.png", "price": 6000 },
-  { "name": "Malcha Frappe", "image": "malcha_frap.jpg", "price": 6000 },
-  { "name": "Malcha Latte", "image": "malcha_latte.jpg", "price": 6000 },
-  { "name": "Mango Passion Tea", "image": "mango_passion_tea.jpg", "price": 5500 },
-  { "name": "Milk Classic Tea", "image": "milk_classic_tea.jpg", "price": 5500 },
-  { "name": "Nitro Vanilla", "image": "nitro_vanila.jpg", "price": 6500 },
-  { "name": "Strawberry Glaze", "image": "strawberry_glazed.jpg", "price": 6000 },
-  { "name": "Strawberry Latte", "image": "strawberry_latte.jpg", "price": 6000 },
-  { "name": "White Choco", "image": "whitechoco.jpg", "price": 6000 }
+  { "name": "아메리카노", "image": "americano.jpg", "price": 4000 },
+  { "name": "카라멜 마키아또", "image": "caramel.jpg", "price": 5500 },
+  { "name": "조 카인드 스누피 초코 카라멜 프라푸치노", "image": "caramel_snupy.jpg", "price": 6000 },
+  { "name": "캐모마일 블렌드 티", "image": "chamomile.jpg", "price": 5000 },
+  { "name": "스파클링 시트러스 에스프레소", "image": "citrus.jpg", "price": 5500 },
+  { "name": "자몽 허니 블랙 티", "image": "grapefruit_black_tea.jpg", "price": 5500 },
+  { "name": "히비스커스 블렌드 티", "image": "hibiscus_tea.jpg", "price": 5000 },
+  { "name": "슈크림 라떼", "image": "latte_cream.jpg", "price": 6000 },
+  { "name": "라벤더 카페 브레베", "image": "lavender.png", "price": 6000 },
+  { "name": "제주 말차 크림 프라푸치노", "image": "malcha_frap.jpg", "price": 6000 },
+  { "name": "제주 말차 라떼", "image": "malcha_latte.jpg", "price": 6000 },
+  { "name": "샤케라또 아포가토", "image": "affogato.jpg", "price": 6000 },
+  { "name": "스타벅스 클래식 밀크 티", "image": "milk_classic_tea.jpg", "price": 5500 },
+  { "name": "나이트로 바닐라 크림", "image": "nitro_vanila.jpg", "price": 6500 },
+  { "name": "스타벅스 딸기 라떼", "image": "strawberry_latte.jpg", "price": 6000 },
+  { "name": "화이트 초콜릿 모카", "image": "whitechoco.jpg", "price": 6000 }
 ]
+
+//https://www.starbucks.co.kr/menu/drink_list.do 참조
