@@ -1,3 +1,4 @@
+/* 메뉴 카드 효과 */
 .menu-card {
   transition: transform 0.3s;
 }
@@ -6,10 +7,54 @@
   transform: scale(1.05);
 }
 
+/* 상단 장바구니 버튼 */
 #cart-button {
   font-weight: bold;
 }
 
+/* 토스트 알림 */
 .toast {
   min-width: 200px;
+}
+
+/* 상세 이미지 스타일 */
+#detail-image {
+  width: 80%;
+  max-height: 200px;
+  object-fit: contain;
+  display: block;
+  margin: 0 auto 1rem auto;
+  border-radius: 0.5rem;
+}
+
+/* 온도 선택 버튼 그룹 */
+#hot-ice-options {
+  margin-top: 0.5rem;
+}
+
+/* 수량 선택 */
+#qty-input {
+  width: 50px;
+  text-align: center;
+}
+
+.input-group {
+  width: 120px;
+}
+
+/* 가격 텍스트 */
+#detail-price {
+  font-weight: bold;
+  color: #0d6efd; /* Bootstrap primary color */
+  margin-top: 1rem;
+}
+
+/* 전체적으로 폼 라벨 강조 */
+.form-label {
+  font-weight: bold;
+}
+
+/* 모달 담기 버튼 전체 너비 */
+#add-to-cart-detail {
+  width: 100%;
 }
