@@ -1,24 +1,3 @@
-/* 아직 정상작동중인 맥북 파일로 되돌리기 */
-#responseText {
-    padding: 20px;
-    border: 1px solid #444;
-    background: linear-gradient(145deg, #3c3c3c, #2e2e2e);
-    border-radius: 12px;
-    color: #f0f0f0;
-    font-size: 1.1rem;
-    text-align: center;
-    margin-top: 30px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.5);
-}
-
-body {
-    background-color: #2e2e2e; /* 더 다크한 회색 */
-    font-family: 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
-    color: #f1f1f1;
-    margin: 0;
-    padding: 0;
-}
-
 /* 캐러셀 */
 .carousel-container {
     display: flex;
@@ -58,8 +37,27 @@ body {
     object-fit: cover;
     border-radius: 20px;
 }
+/* 디자인 변경 */
 
+#responseText {
+    padding: 20px;
+    border: 1px solid #d2b48c; /* 부드러운 브라운 */
+    background: linear-gradient(145deg, #f5e8da, #e6d3c1); /* 크림 톤 그라데이션 */
+    border-radius: 12px;
+    color: #5c4033; /* 다크 브라운 */
+    font-size: 1.1rem;
+    text-align: center;
+    margin-top: 30px;
+    box-shadow: 0 4px 8px rgba(210,180,140,0.5); /* 브라운 섀도우 */
+}
 
+body {
+    background-color: #f5ab6e; /* 밝은 크림색 */
+    font-family: 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+    color: #5c4033; /* 다크 브라운 */
+    margin: 0;
+    padding: 0;
+}
 
 /* 버튼 */
 .before-btn,
@@ -67,7 +65,7 @@ body {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    background: rgba(50, 50, 50, 0.7);
+    background: rgba(210, 180, 140, 0.8); /* 연한 브라운 */
     color: #fff;
     border: none;
     padding: 10px 14px;
@@ -78,7 +76,7 @@ body {
 }
 .before-btn:hover,
 .next-btn:hover {
-    background: rgba(70, 70, 70, 0.9);
+    background: rgba(160, 120, 90, 0.9); /* 더 진한 브라운 */
     transform: translateY(-50%) scale(1.1);
 }
 .before-btn {
@@ -93,23 +91,23 @@ body {
     display: flex;
     max-width: 600px;
     margin: 40px auto 20px auto;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+    box-shadow: 0 4px 10px rgba(210,180,140,0.5);
     border-radius: 12px;
     overflow: hidden;
 }
 .input-group input {
     flex: 1;
-    background-color: #3a3a3a;
-    color: #fff;
+    background-color: #f5e8da; /* 크림톤 */
+    color: #5c4033;
     border: none;
     padding: 14px 18px;
     font-size: 1rem;
 }
 .input-group input::placeholder {
-    color: #bbb;
+    color: #a1887f; /* 부드러운 갈색 */
 }
 .input-group .btn {
-    background-color: #5a5a5a;
+    background-color: #d2b48c; /* 부드러운 브라운 */
     color: #fff;
     border: none;
     padding: 14px 20px;
@@ -118,12 +116,12 @@ body {
     transition: background-color 0.3s;
 }
 .input-group .btn:hover {
-    background-color: #777;
+    background-color: #c19a6b; /* 살짝 더 진한 브라운 */
 }
 
 /* 주문 / 메뉴 버튼 */
 #sendBtn, #menuBtn {
-    background: linear-gradient(145deg, #505050, #3c3c3c);
+    background: linear-gradient(145deg, #d2b48c, #c19a6b); /* 부드러운 브라운 그라데이션 */
     color: #fff;
     border: none;
     padding: 15px 40px;
@@ -131,10 +129,10 @@ body {
     font-size: 1.2rem;
     font-weight: bold;
     border-radius: 18px;
-    box-shadow: 0 6px 10px rgba(0,0,0,0.5);
+    box-shadow: 0 6px 10px rgba(210,180,140,0.5);
     transition: all 0.3s ease;
 }
 #sendBtn:hover, #menuBtn:hover {
-    background: linear-gradient(145deg, #606060, #4a4a4a);
+    background: linear-gradient(145deg, #c19a6b, #a67b5b); /* 눌렀을 때 진한 브라운 */
     transform: translateY(-3px);
 }

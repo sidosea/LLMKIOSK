@@ -1,19 +1,104 @@
 [
-  { "name": "Americano", "image": "americano.jpg", "price": 4000 },
-  { "name": "Caramel", "image": "caramel.jpg", "price": 5500 },
-  { "name": "Caramel Snupy", "image": "caramel_snupy.jpg", "price": 6000 },
-  { "name": "Chamomile", "image": "chamomile.jpg", "price": 5000 },
-  { "name": "Citrus", "image": "citrus.jpg", "price": 5050 },
-  { "name": "Grapefruit Black Tea", "image": "grapefruit_black_tea.jpg", "price": 5500 },
-  { "name": "Hibiscus Tea", "image": "hibiscus_tea.jpg", "price": 5000 },
-  { "name": "Latte Cream", "image": "latte_cream.jpg", "price": 6000 },
-  { "name": "Lavender", "image": "lavender.png", "price": 6000 },
-  { "name": "Malcha Frappe", "image": "malcha_frap.jpg", "price": 6000 },
-  { "name": "Malcha Latte", "image": "malcha_latte.jpg", "price": 6000 },
-  { "name": "Mango Passion Tea", "image": "mango_passion_tea.jpg", "price": 5500 },
-  { "name": "Milk Classic Tea", "image": "milk_classic_tea.jpg", "price": 5500 },
-  { "name": "Nitro Vanilla", "image": "nitro_vanila.jpg", "price": 6500 },
-  { "name": "Strawberry Glaze", "image": "strawberry_glazed.jpg", "price": 6000 },
-  { "name": "Strawberry Latte", "image": "strawberry_latte.jpg", "price": 6000 },
-  { "name": "White Choco", "image": "whitechoco.jpg", "price": 6000 }
+  {
+    "name": "카페 아메리카노",
+    "image": "americano.jpg",
+    "price": 4000,
+    "ice": Y,
+    "caffine" :150,
+    "suger" :0,
+    "description": "진한 에스프레소에 뜨거운 물을 더한 깔끔한 커피"
+  },
+  {
+    "name": "카라멜 마키아또",
+    "image": "caramel.jpg",
+    "price": 5500,
+    "description": "달콤한 카라멜 시럽과 우유가 어우러진 부드러운 라떼"
+  },
+  {
+    "name": "조 카인드 스누피 초코 카라멜 프라푸치노",
+    "image": "caramel_snupy.jpg",
+    "price": 6000,
+    "description": "스누피와 콜라보한 초코와 카라멜이 어우러진 프라푸치노"
+  },
+  {
+    "name": "캐모마일 블렌드 티",
+    "image": "chamomile.jpg",
+    "price": 5000,
+    "description": "부드럽고 은은한 향의 무카페인 허브티"
+  },
+  {
+    "name": "스파클링 시트러스 에스프레소",
+    "image": "citrus.jpg",
+    "price": 5500,
+    "description": "시트러스 향과 에스프레소가 어우러진 청량한 음료"
+  },
+  {
+    "name": "자몽 허니 블랙 티",
+    "image": "grapefruit_black_tea.jpg",
+    "price": 5500,
+    "description": "상큼한 자몽과 꿀, 진한 블랙 티가 조화로운 티"
+  },
+  {
+    "name": "히비스커스 블렌드 티",
+    "image": "hibiscus_tea.jpg",
+    "price": 5000,
+    "description": "새콤달콤한 히비스커스 향의 블렌드 허브티"
+  },
+  {
+    "name": "슈크림 라떼",
+    "image": "latte_cream.jpg",
+    "price": 6000,
+    "description": "달콤한 슈크림과 진한 커피가 어우러진 부드러운 라떼"
+  },
+  {
+    "name": "라벤더 카페 브레베",
+    "image": "lavender.png",
+    "price": 6000,
+    "description": "라벤더 향이 나는 부드럽고 진한 크림 커피"
+  },
+  {
+    "name": "제주 말차 크림 프라푸치노",
+    "image": "malcha_frap.jpg",
+    "price": 6000,
+    "description": "제주 말차와 부드러운 크림이 어우러진 시원한 프라푸치노"
+  },
+  {
+    "name": "제주 말차 라떼",
+    "image": "malcha_latte.jpg",
+    "price": 6000,
+    "description": "제주산 말차와 따뜻한 우유가 조화를 이루는 라떼"
+  },
+  {
+    "name": "샤케라또 아포가토",
+    "image": "affogato.jpg",
+    "price": 6000,
+    "description": "에스프레소와 바닐라 아이스크림이 조화된 진한 아포가토"
+  },
+  {
+    "name": "스타벅스 클래식 밀크 티",
+    "image": "milk_classic_tea.jpg",
+    "price": 5500,
+    "description": "우유와 홍차가 부드럽게 어우러진 고소한 밀크티"
+  },
+  {
+    "name": "나이트로 바닐라 크림",
+    "image": "nitro_vanila.jpg",
+    "price": 6500,
+    "description": "풍부한 질감의 나이트로 커피에 달콤한 바닐라 크림을 더한 음료"
+  },
+  {
+    "name": "스타벅스 딸기 라떼",
+    "image": "strawberry_latte.jpg",
+    "price": 6000,
+    "description": "신선한 딸기와 우유가 어우러진 달콤한 라떼"
+  },
+  {
+    "name": "화이트 초콜릿 모카",
+    "image": "whitechoco.jpg",
+    "price": 6000,
+    "description": "화이트 초콜릿과 진한 에스프레소가 어우러진 부드러운 모카"
+  }
 ]
+
+
+//https://www.starbucks.co.kr/menu/drink_list.do 참조
