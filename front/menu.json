@@ -1,8 +1,11 @@
 [
   {
-    "name": "아메리카노",
+    "name": "카페 아메리카노",
     "image": "americano.jpg",
     "price": 4000,
+    "ice": Y,
+    "caffine" :150,
+    "suger" :0,
     "description": "진한 에스프레소에 뜨거운 물을 더한 깔끔한 커피"
   },
   {
