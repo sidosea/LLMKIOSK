@@ -11,7 +11,7 @@ const toastBootstrap = new bootstrap.Toast($toastLive[0]);
 
 // 📄 메뉴 로드
 async function loadMenu() {
-  const response = await fetch("menu.json");
+  const response = await fetch('menu.json');
   const menuItems = await response.json();
   renderMenu(menuItems);
 }
