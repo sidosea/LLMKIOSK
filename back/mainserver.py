@@ -16,6 +16,7 @@ client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))  # 또는 직접 키 입력
 # 상대경로로 menu.json 불러오기
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 MENU_PATH = os.path.join(BASE_DIR, "../front/menu.json")
+EMBEDDED_MENU_PATH = os.path.join(BASE_DIR, "menu_with_embedding.json")
 
 with open(MENU_PATH, "r", encoding="utf-8") as f:
     menu_data = json.load(f)
@@ -31,11 +32,28 @@ def get_embedding(text):
     except Exception as e: # OpenAI API 호출 중 오류 발생
         print(f"임베딩 생성 중 오류 발생: {e}")
         return []  # 빈 리스트 반환
+#추가 정보 입력
+def enrich_description(item):
+    desc = item["description"]
+    caffeine_info = f"카페인 함량은 {item['caffeine']}mg이며"
+    sugar_info = f"당분은 {item['suger']}g입니다."
+    return f"{desc}. {caffeine_info}, {sugar_info}"
 
+# 임베딩 데이터 로딩 또는 생성
+if os.path.exists(EMBEDDED_MENU_PATH):
+    with open(EMBEDDED_MENU_PATH, "r", encoding="utf-8") as f:
+        menu_data = json.load(f)
+else:
+    with open(MENU_PATH, "r", encoding="utf-8") as f:
+        menu_data = json.load(f)
 
-# 모든 메뉴 설명 임베딩화
-for item in menu_data:
-    item["embedding"] = get_embedding(item["description"])
+    for item in menu_data:
+        enriched_desc = enrich_description(item)
+        item["embedding"] = get_embedding(enriched_desc)
+
+    # 저장
+    with open(EMBEDDED_MENU_PATH, "w", encoding="utf-8") as f:
+        json.dump(menu_data, f, ensure_ascii=False, indent=2)
 
 # Flask 설정
 app = Flask(__name__)
