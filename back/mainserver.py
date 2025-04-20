@@ -77,10 +77,17 @@ def recommend_menu():
     # 전체 메뉴 정보는 프론트가 필요할 때 따로 요청
     # 여기선 순위별 이름만 추출
     result = {
-        "top1": top_items[0][0]["name"] if len(top_items) > 0 else None,
-        "top2": top_items[1][0]["name"] if len(top_items) > 1 else None,
-        "top3": top_items[2][0]["name"] if len(top_items) > 2 else None
-    }
+    "message": "추천 메뉴를 안내해드릴게요!",
+    "recommendations": [
+        {
+            "name": item[0]["name"],
+            "image": item[0]["image"],
+            "description": item[0]["description"]
+        }
+        for item in top_items
+    ]
+}
+
     print(result)
     return jsonify(result)
 

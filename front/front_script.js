@@ -57,6 +57,10 @@ $(document).ready(function () {
             success: function (response) {
                 $("#responseText").text(response.message);
                 $("#textInput").val("");
+
+                if (response.recommendations && response.recommendations.length > 0) {
+                    displayRecommendations(response.recommendations);
+                }
             },
             error: function () {
                 $("#responseText").text("서버와 연결할 수 없습니다.");
@@ -64,50 +68,55 @@ $(document).ready(function () {
         });
     }
     function displayRecommendations(recs) {
-        const $recommendBox = $("#recommendationBox");
-        $recommendBox.empty();
+        const $box = $("#recommendationBox");
+        $box.empty().removeClass("d-none");
 
         const main = recs[0];
         const others = recs.slice(1);
 
-        // 1순위 메인 추천 메뉴
+        // 메인 추천 메뉴
         const mainHTML = `
-            <div id="mainMenu" class="text-center mb-4">
-                <img src="img/${main.image}" alt="${main.name}" class="img-fluid rounded mb-2" style="max-width: 200px;">
-                <h3>${main.name}</h3>
-                <p>${main.description}</p>
-                <button class="btn btn-success" id="addToCartBtn">🛒 ${main.name} 메뉴를 담으시겠습니까?</button>
-            </div>
-        `;
+        <div class="text-center">
+            <h4>${main.name}</h4>
+            <img src="img/${main.image}" class="img-fluid rounded" style="max-width: 200px;" />
+            <p class="mt-2">${main.description}</p>
+            <button class="btn btn-success mt-3" id="addToCartBtn">🛍 "${main.name}" 담기</button>
+        </div>
+    `;
+        $box.append(mainHTML);
 
-        $recommendBox.append(mainHTML);
-
-        // 2, 3순위 메뉴 추천
+        // 2~3순위 추천
         if (others.length > 0) {
-            let otherHTML = `<div id="otherSuggestions"><h5>혹시 이것을 찾으셨나요?</h5><div class="d-flex gap-3 justify-content-center">`;
+            let otherHTML = `
+            <div class="mt-4">
+                <small>혹시 이것을 찾으셨나요?</small>
+                <div class="d-flex justify-content-center gap-3 mt-2">`;
+
             others.forEach((item) => {
                 otherHTML += `
-                    <div class="text-center alt-item" style="cursor: pointer;">
-                        <img src="img/${item.image}" alt="${item.name}" class="img-thumbnail" style="width:100px;">
-                        <div>${item.name}</div>
-                    </div>
-                `;
+                <div class="text-center alt-item" style="cursor:pointer;">
+                    <img src="img/${item.image}" class="img-thumbnail" style="width:100px;" />
+                    <div>${item.name}</div>
+                </div>`;
             });
+
             otherHTML += `</div></div>`;
-            $recommendBox.append(otherHTML);
+            $box.append(otherHTML);
         }
 
-        // 이벤트: 다른 메뉴 클릭 시 메인으로 올리기
+        // 클릭 이벤트
         $(".alt-item").on("click", function () {
-            const selectedName = $(this).find("div").text();
-            const selected = recs.find((r) => r.name === selectedName);
-            if (selected) displayRecommendations([selected, ...recs.filter((r) => r.name !== selected.name)]);
+            const name = $(this).find("div").text();
+            const selected = recs.find((r) => r.name === name);
+            if (selected) {
+                const newList = [selected, ...recs.filter((r) => r.name !== name)];
+                displayRecommendations(newList);
+            }
         });
 
-        // 장바구니 버튼 클릭
+        // 장바구니 담기 버튼
         $("#addToCartBtn").on("click", function () {
             alert(`🛒 ${main.name} 메뉴를 장바구니에 담았습니다!`);
-            // 여기에 실제 장바구니 기능 추가 가능
         });
     }
 

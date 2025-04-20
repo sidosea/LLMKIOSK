@@ -39,23 +39,8 @@
             <button id="sendBtn" class="btn btn-primary btn-lg">🛒주문하기</button>
             <button id="menuBtn" class="btn btn-primary btn-lg">📋메뉴 보기</button>
 
-            <div id="recommendationBox" class="mt-4 d-none">
-                <h4 id="mainMenuName"></h4>
-                <img
-                    id="mainMenuImage"
-                    src="front/img/default.png"
-                    class="img-fluid rounded"
-                    style="max-width: 200px" />
-                <p id="mainMenuDesc" class="mt-2"></p>
-                <button class="btn btn-success mt-3" id="addToCartBtn">
-                    🛍 "<span id="cartItemName"></span>" 담기
-                </button>
+           <div id="recommendationBox" class="container mt-4 d-none"></div>
 
-                <div class="mt-4">
-                    <small>혹시 이것을 찾으셨나요?</small>
-                    <div id="otherSuggestions" class="d-flex justify-content-center gap-3 mt-2"></div>
-                </div>
-            </div>
 
             <p id="responseText" class="mt-3">서버로부터 응답 대기중</p>
         </div>
