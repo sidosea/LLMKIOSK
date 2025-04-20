@@ -65,37 +65,25 @@ def recommend_menu():
     user_input = data.get("text", "")
     print(f"사용자 입력: {user_input}")
 
-    # 사용자 입력 임베딩
-    user_embedding = get_embedding(user_input)
-
-    # 각 메뉴와 유사도 계산
+    user_embedding = get_embedding(user_input) # 입력값으로 임베딩 생성
     similarities = []
+
     for item in menu_data:
-        sim = cosine_similarity(
-            [user_embedding],
-            [item["embedding"]]
-        )[0][0]
+        sim = cosine_similarity([user_embedding], [item["embedding"]])[0][0]
         similarities.append((item, sim))
 
-    # 유사도 순 정렬 후 상위 3개 추출
     top_items = sorted(similarities, key=lambda x: x[1], reverse=True)[:3]
-    #print(f"추천된 상위 3개 메뉴: {top_items}")  # 추천 메뉴를 출력 -- 확인 완료
 
-    recommendations = [
-        {
-            "name": item["name"],
-            "image": item["image"],
-            "price": item["price"],
-            "description": item["description"],
-            "score": round(score, 3)
-        }
-        for item, score in top_items
-    ]
+    # 전체 메뉴 정보는 프론트가 필요할 때 따로 요청
+    # 여기선 순위별 이름만 추출
+    result = {
+        "top1": top_items[0][0]["name"] if len(top_items) > 0 else None,
+        "top2": top_items[1][0]["name"] if len(top_items) > 1 else None,
+        "top3": top_items[2][0]["name"] if len(top_items) > 2 else None
+    }
+    print(result)
+    return jsonify(result)
 
-    # 추천 결과가 제대로 출력되었는지 확인
-    print(f"추천 결과: {recommendations}")
-
-    return jsonify({"recommendations": recommendations})
 
 
 if __name__ == '__main__':

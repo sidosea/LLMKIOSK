@@ -136,3 +136,38 @@ body {
     background: linear-gradient(145deg, #c19a6b, #a67b5b); /* 눌렀을 때 진한 브라운 */
     transform: translateY(-3px);
 }
+
+#recommendationBox {
+    background-color: #fff8f0;
+    border-radius: 16px;
+    padding: 20px;
+    margin-top: 30px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+#mainMenu h3 {
+    color: #a0522d;
+    margin-bottom: 10px;
+}
+
+#mainMenu p {
+    font-size: 1rem;
+    color: #333;
+}
+
+#addToCartBtn {
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+#otherSuggestions h5 {
+    margin-top: 20px;
+    margin-bottom: 10px;
+    color: #5c4033;
+}
+
+.alt-item:hover {
+    transform: scale(1.05);
+    transition: 0.3s;
+}
+

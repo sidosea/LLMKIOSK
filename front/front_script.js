@@ -63,6 +63,53 @@ $(document).ready(function () {
             }
         });
     }
+    function displayRecommendations(recs) {
+        const $recommendBox = $("#recommendationBox");
+        $recommendBox.empty();
+
+        const main = recs[0];
+        const others = recs.slice(1);
+
+        // 1순위 메인 추천 메뉴
+        const mainHTML = `
+            <div id="mainMenu" class="text-center mb-4">
+                <img src="img/${main.image}" alt="${main.name}" class="img-fluid rounded mb-2" style="max-width: 200px;">
+                <h3>${main.name}</h3>
+                <p>${main.description}</p>
+                <button class="btn btn-success" id="addToCartBtn">🛒 ${main.name} 메뉴를 담으시겠습니까?</button>
+            </div>
+        `;
+
+        $recommendBox.append(mainHTML);
+
+        // 2, 3순위 메뉴 추천
+        if (others.length > 0) {
+            let otherHTML = `<div id="otherSuggestions"><h5>혹시 이것을 찾으셨나요?</h5><div class="d-flex gap-3 justify-content-center">`;
+            others.forEach((item) => {
+                otherHTML += `
+                    <div class="text-center alt-item" style="cursor: pointer;">
+                        <img src="img/${item.image}" alt="${item.name}" class="img-thumbnail" style="width:100px;">
+                        <div>${item.name}</div>
+                    </div>
+                `;
+            });
+            otherHTML += `</div></div>`;
+            $recommendBox.append(otherHTML);
+        }
+
+        // 이벤트: 다른 메뉴 클릭 시 메인으로 올리기
+        $(".alt-item").on("click", function () {
+            const selectedName = $(this).find("div").text();
+            const selected = recs.find((r) => r.name === selectedName);
+            if (selected) displayRecommendations([selected, ...recs.filter((r) => r.name !== selected.name)]);
+        });
+
+        // 장바구니 버튼 클릭
+        $("#addToCartBtn").on("click", function () {
+            alert(`🛒 ${main.name} 메뉴를 장바구니에 담았습니다!`);
+            // 여기에 실제 장바구니 기능 추가 가능
+        });
+    }
 
     // 주문 버튼 클릭 및 엔터 키 입력
     $("#sendBtn").on("click", sendText);
