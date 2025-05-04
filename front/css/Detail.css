@@ -53,9 +53,9 @@
 
 /* 배경 및 기본 텍스트 */
 body {
-    background-color: #f5ab6e;
+    background-color: #ffffff;
     font-family: 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
-    color: #5c4033;
+    color: #000000;
     margin: 0;
     padding: 0;
 }
