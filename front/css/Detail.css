@@ -5,7 +5,7 @@
     align-items: center;
     position: relative;
     margin: 30px auto;
-    width: 260px; /* 보이는 영역은 1장 크기 고정 */
+    width: 260px;
     height: 260px;
     overflow: hidden;
     border-radius: 20px;
@@ -14,8 +14,8 @@
 
 .slide-container {
     display: flex;
-    width: calc(260px * 3); /* 슬라이드 총 갯수 × 한 장 크기 */
-    transform: translateX(0); /* 시작은 0 */
+    width: calc(260px * 3);
+    transform: translateX(0);
     transition: transform 0.5s ease-in-out;
 }
 
@@ -37,35 +37,36 @@
     object-fit: cover;
     border-radius: 20px;
 }
-/* 디자인 변경 */
 
+/* 응답 박스 */
 #responseText {
     padding: 20px;
-    border: 1px solid #d2b48c; /* 부드러운 브라운 */
-    background: linear-gradient(145deg, #f5e8da, #e6d3c1); /* 크림 톤 그라데이션 */
+    border: 1px solid #d2b48c;
+    background: linear-gradient(145deg, #f5e8da, #e6d3c1);
     border-radius: 12px;
-    color: #5c4033; /* 다크 브라운 */
+    color: #5c4033;
     font-size: 1.1rem;
     text-align: center;
     margin-top: 30px;
-    box-shadow: 0 4px 8px rgba(210,180,140,0.5); /* 브라운 섀도우 */
+    box-shadow: 0 4px 8px rgba(210,180,140,0.5);
 }
 
+/* 배경 및 기본 텍스트 */
 body {
-    background-color: #f5ab6e; /* 밝은 크림색 */
+    background-color: #f5ab6e;
     font-family: 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
-    color: #5c4033; /* 다크 브라운 */
+    color: #5c4033;
     margin: 0;
     padding: 0;
 }
 
-/* 버튼 */
+/* 캐러셀 버튼 */
 .before-btn,
 .next-btn {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    background: rgba(210, 180, 140, 0.8); /* 연한 브라운 */
+    background: rgba(210, 180, 140, 0.8);
     color: #fff;
     border: none;
     padding: 10px 14px;
@@ -76,17 +77,13 @@ body {
 }
 .before-btn:hover,
 .next-btn:hover {
-    background: rgba(160, 120, 90, 0.9); /* 더 진한 브라운 */
+    background: rgba(160, 120, 90, 0.9);
     transform: translateY(-50%) scale(1.1);
 }
-.before-btn {
-    left: 10px;
-}
-.next-btn {
-    right: 10px;
-}
+.before-btn { left: 10px; }
+.next-btn { right: 10px; }
 
-/* 입력창 */
+/* 입력창 그룹 (일반 입력용) */
 .input-group {
     display: flex;
     max-width: 600px;
@@ -97,17 +94,17 @@ body {
 }
 .input-group input {
     flex: 1;
-    background-color: #f5e8da; /* 크림톤 */
+    background-color: #f5e8da;
     color: #5c4033;
     border: none;
     padding: 14px 18px;
     font-size: 1rem;
 }
 .input-group input::placeholder {
-    color: #a1887f; /* 부드러운 갈색 */
+    color: #a1887f;
 }
 .input-group .btn {
-    background-color: #d2b48c; /* 부드러운 브라운 */
+    background-color: #d2b48c;
     color: #fff;
     border: none;
     padding: 14px 20px;
@@ -116,12 +113,17 @@ body {
     transition: background-color 0.3s;
 }
 .input-group .btn:hover {
-    background-color: #c19a6b; /* 살짝 더 진한 브라운 */
+    background-color: #c19a6b;
+}
+
+/* 수량 선택용 입력 */
+.input-group-qty {
+    width: 120px;
 }
 
 /* 주문 / 메뉴 버튼 */
 #sendBtn, #menuBtn {
-    background: linear-gradient(145deg, #d2b48c, #c19a6b); /* 부드러운 브라운 그라데이션 */
+    background: linear-gradient(145deg, #d2b48c, #c19a6b);
     color: #fff;
     border: none;
     padding: 15px 40px;
@@ -133,10 +135,11 @@ body {
     transition: all 0.3s ease;
 }
 #sendBtn:hover, #menuBtn:hover {
-    background: linear-gradient(145deg, #c19a6b, #a67b5b); /* 눌렀을 때 진한 브라운 */
+    background: linear-gradient(145deg, #c19a6b, #a67b5b);
     transform: translateY(-3px);
 }
 
+/* 추천 박스 */
 #recommendationBox {
     background-color: #fff8f0;
     border-radius: 16px;
@@ -144,30 +147,80 @@ body {
     margin-top: 30px;
     box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
-
 #mainMenu h3 {
     color: #a0522d;
     margin-bottom: 10px;
 }
-
 #mainMenu p {
     font-size: 1rem;
     color: #333;
 }
-
 #addToCartBtn {
     margin-top: 10px;
     font-weight: bold;
 }
-
 #otherSuggestions h5 {
     margin-top: 20px;
     margin-bottom: 10px;
     color: #5c4033;
 }
-
 .alt-item:hover {
     transform: scale(1.05);
     transition: 0.3s;
 }
 
+/* 메뉴 카드 효과 */
+.menu-card {
+    transition: transform 0.3s;
+}
+.menu-card:hover {
+    transform: scale(1.05);
+}
+
+/* 상단 장바구니 버튼 */
+#cart-button {
+    font-weight: bold;
+}
+
+/* 토스트 알림 */
+.toast {
+    min-width: 200px;
+}
+
+/* 상세 이미지 */
+#detail-image {
+    width: 80%;
+    max-height: 200px;
+    object-fit: contain;
+    display: block;
+    margin: 0 auto 1rem auto;
+    border-radius: 0.5rem;
+}
+
+/* 온도 선택 버튼 그룹 */
+#hot-ice-options {
+    margin-top: 0.5rem;
+}
+
+/* 수량 선택 */
+#qty-input {
+    width: 50px;
+    text-align: center;
+}
+
+/* 가격 텍스트 */
+#detail-price {
+    font-weight: bold;
+    color: #0d6efd;
+    margin-top: 1rem;
+}
+
+/* 폼 라벨 */
+.form-label {
+    font-weight: bold;
+}
+
+/* 모달 담기 버튼 전체 너비 */
+#add-to-cart-detail {
+    width: 100%;
+}
