@@ -167,49 +167,63 @@ function displayRecommendations(recs) {
   const $box = $("#recommendationBox");
   $box.empty().removeClass("d-none");
 
-  const main = recs[0];
-  const others = recs.slice(1);
+  // menu.json에서 메뉴 정보 가져오기
+  fetch("menu.json")
+    .then(res => res.json())
+    .then(menuItems => {
+      const main = menuItems.find(item => item.name === recs[0].name);
+      if (!main) return; // 메뉴를 찾지 못한 경우
 
-  const mainHTML = `
-    <div class="text-center">
-        <h4>${main.name}</h4>
-        <img src="img/${main.image}" class="img-fluid rounded" style="max-width: 200px;" />
-        <p class="mt-2">${main.description}</p>
-        <button class="btn btn-success mt-3" id="addToCartBtn">🛍 "${main.name}" 담기</button>
-    </div>
-  `;
-  $box.append(mainHTML);
+      const mainHTML = `
+        <div class="text-center">
+            <h4>${main.name}</h4>
+            <img src="img/${main.image}" class="img-fluid rounded" style="max-width: 200px; cursor: pointer;" id="main-recommendation" />
+            <p class="mt-2">${main.description}</p>
+            <button class="btn btn-success mt-3" id="addToCartBtn">🛍 "${main.name}" 담기</button>
+        </div>
+      `;
+      $box.append(mainHTML);
 
-  if (others.length > 0) {
-    let otherHTML = `
-      <div class="mt-4">
-          <small>혹시 이것을 찾으셨나요?</small>
-          <div class="d-flex justify-content-center gap-3 mt-2">`;
+      if (recs.length > 1) {
+        let otherHTML = `
+          <div class="mt-4">
+              <small>혹시 이것을 찾으셨나요?</small>
+              <div class="d-flex justify-content-center gap-3 mt-2">`;
 
-    others.forEach((item) => {
-      otherHTML += `
-        <div class="text-center alt-item" style="cursor:pointer;">
-            <img src="img/${item.image}" class="img-thumbnail" style="width:100px;" />
-            <div>${item.name}</div>
-        </div>`;
+        recs.slice(1).forEach((rec) => {
+          const item = menuItems.find(menu => menu.name === rec.name);
+          if (item) {
+            otherHTML += `
+              <div class="text-center alt-item" style="cursor:pointer;">
+                  <img src="img/${item.image}" class="img-thumbnail" style="width:100px;" />
+                  <div>${item.name}</div>
+              </div>`;
+          }
+        });
+
+        otherHTML += `</div></div>`;
+        $box.append(otherHTML);
+      }
+
+      // 메인 추천 메뉴 클릭 시 상세 모달 열기
+      $("#main-recommendation").on("click", function() {
+        openDetailModal(main);
+      });
+
+      // 담기 버튼 클릭 시 상세 모달 열기
+      $("#addToCartBtn").on("click", function() {
+        openDetailModal(main);
+      });
+
+      $(".alt-item").on("click", function () {
+        const name = $(this).find("div").text();
+        const selected = menuItems.find(item => item.name === name);
+        if (selected) {
+          const newList = [selected, ...recs.filter(r => r.name !== name)];
+          displayRecommendations(newList);
+        }
+      });
     });
-
-    otherHTML += `</div></div>`;
-    $box.append(otherHTML);
-  }
-
-  $(".alt-item").on("click", function () {
-    const name = $(this).find("div").text();
-    const selected = recs.find((r) => r.name === name);
-    if (selected) {
-      const newList = [selected, ...recs.filter((r) => r.name !== name)];
-      displayRecommendations(newList);
-    }
-  });
-
-  $("#addToCartBtn").on("click", function () {
-    alert(`🛒 ${main.name} 메뉴를 장바구니에 담았습니다!`);
-  });
 }
 
 function sendText() {
