@@ -297,6 +297,7 @@ $(document).ready(function () {
   }
 
   function startSlideInterval() {
+    if (slideInterval) return;
     slideInterval = setInterval(function () {
       btn_state = (btn_state + 1) % totalSlides;
       updateSlidePosition();
@@ -306,6 +307,7 @@ $(document).ready(function () {
   function stopSlideInterval() {
     if (slideInterval) {
       clearInterval(slideInterval);
+      slideInterval = null;
     }
   }
 
@@ -326,11 +328,16 @@ $(document).ready(function () {
   // 슬라이드 자동 전환 시작
   startSlideInterval();
 
-  // 마우스가 슬라이드 위에 있을 때 자동 전환 중지
-  $(".carousel-container").hover(
-    function() { stopSlideInterval(); },
-    function() { startSlideInterval(); }
-  );
+  // 입력창 이벤트 처리
+  if ($("#textInput").length) {
+    $("#textInput").on("input", function() {
+      if ($(this).val().trim()) {
+        stopSlideInterval();
+      } else {
+        startSlideInterval();
+      }
+    });
+  }
 
   // 텍스트 전송
   if ($("#sendBtn").length) {
