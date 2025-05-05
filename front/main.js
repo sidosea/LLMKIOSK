@@ -4,7 +4,7 @@ const cart = {};
 
 // 가격 포맷
 function formatPrice(price) {
-  return "\\" + price.toLocaleString();
+  return "₩" + price.toLocaleString();
 }
 
 // 🧾 메뉴 출력
@@ -156,6 +156,32 @@ function showToast(itemName) {
   toastBootstrap.show();
 }
 
+// 장바구니 관련 함수들 추가
+function clearCart() {
+  Object.keys(cart).forEach(key => delete cart[key]);
+  updateCart();
+  $("#cartModal").modal("hide");
+}
+
+function decreaseQuantity(name) {
+  if (cart[name].quantity > 1) {
+    cart[name].quantity--;
+  } else {
+    delete cart[name];
+  }
+  updateCart();
+}
+
+function increaseQuantity(name) {
+  cart[name].quantity++;
+  updateCart();
+}
+
+function removeFromCart(name) {
+  delete cart[name];
+  updateCart();
+}
+
 function loadMenu() {
   fetch("menu.json")
     .then((res) => res.json())
@@ -261,6 +287,7 @@ $(document).ready(function () {
   const $slides = $(".slide-box");
   const totalSlides = $slides.length - 1;
   const slideWidth = 260;
+  let slideInterval;
 
   function updateSlidePosition() {
     $slideContainer.css({
@@ -269,20 +296,41 @@ $(document).ready(function () {
     });
   }
 
+  function startSlideInterval() {
+    slideInterval = setInterval(function () {
+      btn_state = (btn_state + 1) % totalSlides;
+      updateSlidePosition();
+    }, 3000);
+  }
+
+  function stopSlideInterval() {
+    if (slideInterval) {
+      clearInterval(slideInterval);
+    }
+  }
+
   $(".next-btn").on("click", function () {
+    stopSlideInterval();
     btn_state = (btn_state + 1) % totalSlides;
     updateSlidePosition();
+    startSlideInterval();
   });
 
   $(".before-btn").on("click", function () {
+    stopSlideInterval();
     btn_state = (btn_state - 1 + totalSlides) % totalSlides;
     updateSlidePosition();
+    startSlideInterval();
   });
 
-  setInterval(function () {
-    btn_state = (btn_state + 1) % totalSlides;
-    updateSlidePosition();
-  }, 3000);
+  // 슬라이드 자동 전환 시작
+  startSlideInterval();
+
+  // 마우스가 슬라이드 위에 있을 때 자동 전환 중지
+  $(".carousel-container").hover(
+    function() { stopSlideInterval(); },
+    function() { startSlideInterval(); }
+  );
 
   // 텍스트 전송
   if ($("#sendBtn").length) {
@@ -312,8 +360,10 @@ $(document).ready(function () {
     removeFromCart($(this).data("name"));
   });
 
+  // 💳 결제하기 버튼
   $(".btn-success").on("click", function () {
     if ($(this).attr("id") === "addToCartBtn" || $(this).attr("id") === "add-to-cart-detail") return;
+    // 장바구니 정보를 JSON으로 직렬화
     const cartData = encodeURIComponent(JSON.stringify(cart));
     window.location.href = `paymentpage.html?cart=${cartData}`;
   });
