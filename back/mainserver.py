@@ -13,10 +13,9 @@ import os
 load_dotenv()
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
-# 상대경로로 menu.json 불러오기
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-MENU_PATH = os.path.join(BASE_DIR, "menu_raw.json")
-EMBEDDED_MENU_PATH = os.path.join(BASE_DIR, "menu_with_embedding.json")
+# 파일 경로
+MENU_FILE = "back/menu_raw.json"  # 수정되지 않는 상세 메뉴 파일
+EMBED_FILE = "back/menu_with_embedding.json"  # 임베딩 저장 파일
 
 # 메뉴 설명 임베딩 사전 생성
 def get_embedding(text):
@@ -30,11 +29,11 @@ def get_embedding(text):
         print(f"임베딩 생성 중 오류 발생: {e}")
         return []
 
-# 임베딩 데이터 로딩 또는 생성
-if os.path.exists(EMBEDDED_MENU_PATH):
-    with open(EMBEDDED_MENU_PATH, "r", encoding="utf-8") as f:
+# 임베딩 데이터와 원본 메뉴 데이터 로딩
+if os.path.exists(EMBED_FILE):
+    with open(EMBED_FILE, "r", encoding="utf-8") as f:
         menu_data = json.load(f)
-    with open(MENU_PATH, "r", encoding="utf-8") as f:
+    with open(MENU_FILE, "r", encoding="utf-8") as f:
         original_menu = json.load(f)
         # 메뉴 이름을 키로 하는 딕셔너리 생성
         menu_dict = {item["name"]: item for item in original_menu}
