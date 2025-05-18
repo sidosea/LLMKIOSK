@@ -1,18 +1,20 @@
 import os
 import json
-import openai
+from openai import OpenAI
 import time
+from dotenv import load_dotenv
 from tqdm import tqdm # 진행 상황 표시
 
-openai.api_key = "API_KEY"
+load_dotenv()
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 ## price 와 image 는 사용하지 않고 embdding 생성, 두가지를 제외하여 자연어로 변환, json 파일로 저장
 ## 만약 이미 자연어 파일이 존재한다면 새로운 jsoon 자연어는 생성하지 않고 기존 json 파일을 사용하여 임베딩 값 생성
 
 # 파일 경로
-MENU_FILE = "menu_raw.json" #수정되지 않는 상세 메뉴 파일
-TEXT_FILE = "menu_texts.json" # 자연어로 변환된 메뉴 파일
-EMBED_FILE = "menu_with_embedding.json" # 임베딩 저장 파일
+MENU_FILE = "back/menu_raw.json" #수정되지 않는 상세 메뉴 파일
+TEXT_FILE = "back/menu_texts.json" # 자연어로 변환된 메뉴 파일
+EMBED_FILE = "back/menu_with_embedding.json" # 임베딩 저장 파일
 
 # 텍스트 변환 함수
 def menu_to_text(item):
@@ -46,15 +48,16 @@ def load_or_create_texts():
 def get_embedding(text, retry=3):
     for attempt in range(retry):
         try:
-            response = openai.Embedding.create(
+            response = client.embeddings.create(
                 model="text-embedding-ada-002",
                 input=text
             )
-            return response["data"][0]["embedding"]
+            return response.data[0].embedding  # api 업데이트로 수정된 부분
         except Exception as e:
             print(f"⚠️ 임베딩 실패 (시도 {attempt+1}/{retry}): {e}")
-            time.sleep(2)  # 잠시 대기 후 재시도
+            time.sleep(10)  # 잠시 대기 후 재시도
     return []
+
 
 # Step 3: 저장
 def generate_embeddings(texts):
