@@ -1,7 +1,7 @@
 <<작성중>>
 
 ---
-PPT 파일 (테스트 영상 포함)
+1학기 중간 발표 PPT 파일 (테스트 영상 포함)
 https://drive.google.com/drive/folders/1JLLUYqyupj-SW1ZPtVVaN3DOeE09m8KW?usp=sharing
 ---
 
