@@ -186,3 +186,6 @@ https://drive.google.com/drive/folders/1JLLUYqyupj-SW1ZPtVVaN3DOeE09m8KW?usp=sha
 
 일지
 https://tin-oak-590.notion.site/1d18d7c109668042950df1845b779f11?source=copy_link
+
+요구분석, DB 설계
+https://tin-oak-590.notion.site/DB-1c38d7c10966803dabddcfc8be44665e?source=copy_link
