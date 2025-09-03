@@ -49,21 +49,31 @@ $(document).ready(function () {
         let text = $("#textInput").val().trim();
         if (text === "") return;
 
-        $.ajax({
-            url: "http://localhost:5000/send_text",
+        $.ajax({ //RESTful 적용 반영
+            url: "http://localhost:5000/api/v1/recommendations",
             type: "POST",
             contentType: "application/json",
-            data: JSON.stringify({ text: text }),
+            data: JSON.stringify({ query: text, temperature: null, quantity: 1 }),
             success: function (response) {
-                $("#responseText").text(response.message);
-                $("#textInput").val("");
-
-                if (response.recommendations && response.recommendations.length > 0) {
-                    displayRecommendations(response.recommendations);
+                // 새 포맷 : data: { intent, recommendations }}
+                const data = response && response.data;
+                if (!data) { //에러 메세지 백->프론트로 이동
+                    $("#responseText").text("응답 형식이 올바르지 않습니다.");
+                    return;
                 }
+                //response 백-> 프론트로 이동
+              $("#responseText").text("추천 메뉴를 안내해드릴게요!");
+              $("#textInput").val("");
+
+              if (data.recommendations && data.recommendations.length > 0) {
+                displayRecommendations(data.recommendations);
+              }
             },
-            error: function () {
-                $("#responseText").text("서버와 연결할 수 없습니다.");
+            error: function (xhr) { //RESTful 표준 에러 처리
+                const errMsg =
+                (xhr.responseJSON && xhr.responseJSON.error && xhr.responseJSON.error.message) ||
+                "서버와 연결할 수 없습니다.";      
+                $("#responseText").text(errMsg);
             }
         });
     }
