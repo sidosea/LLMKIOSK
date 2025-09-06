@@ -183,9 +183,18 @@ function removeFromCart(name) {
 }
 
 function loadMenu() {
-  fetch("menu.json")
+  fetch("http://localhost:5000/api/v1/menus")
     .then((res) => res.json())
-    .then(renderMenu);
+    .then((response) => {
+      if (response.data) {
+        renderMenu(response.data);
+      } else {
+        console.error("메뉴 데이터를 가져올 수 없습니다:", response.error);
+      }
+    })
+    .catch((error) => {
+      console.error("메뉴 로딩 실패:", error);
+    });
 }
 
 // 추천 응답 표시
@@ -193,10 +202,15 @@ function displayRecommendations(recs) {
   const $box = $("#recommendationBox");
   $box.empty().removeClass("d-none");
 
-  // menu.json에서 메뉴 정보 가져오기
-  fetch("menu.json")
+  // API에서 메뉴 정보 가져오기
+  fetch("http://localhost:5000/api/v1/menus")
     .then(res => res.json())
-    .then(menuItems => {
+    .then(response => {
+      if (!response.data) {
+        console.error("메뉴 데이터를 가져올 수 없습니다:", response.error);
+        return;
+      }
+      const menuItems = response.data;
       const main = menuItems.find(item => item.name === recs[0].name);
       if (!main) return; // 메뉴를 찾지 못한 경우
 
