@@ -87,8 +87,25 @@ def test_db_connection():
 def load_menu_data_from_db():
     """DB에서 메뉴 데이터와 임베딩을 로드합니다."""
     try:
+        # 임베딩을 포함한 모든 데이터 조회
         response = supabase.table('menus').select('*').execute()
         if response.data:
+            # 임베딩 데이터를 올바른 형태로 변환
+            for item in response.data:
+                if item.get('embedding'):
+                    embedding = item['embedding']
+                    if isinstance(embedding, str):
+                        # 문자열을 파싱하여 숫자 배열로 변환
+                        import ast
+                        try:
+                            item['embedding'] = ast.literal_eval(embedding)
+                        except (ValueError, SyntaxError) as e:
+                            # 파싱 실패 시 치명적 오류로 처리
+                            error_msg = f"임베딩 데이터 파싱 실패 - 메뉴: {item.get('name', 'Unknown')}, 오류: {e}"
+                            logging.getLogger("recommendations").error(error_msg)
+                            print(f"{error_msg}")
+                            print("서버를 시작 불가, DB의 임베딩 데이터에서 문제가 확인 되었습니다.")
+                            exit(1)
             return response.data
         else:
             logging.getLogger("recommendations").warning("DB에서 메뉴 데이터를 찾을 수 없습니다.")
@@ -150,6 +167,37 @@ def _compute_recommendations(query_text):
 
 # Blueprint 적용
 api_v1 = Blueprint("api_v1", __name__, url_prefix="/api/v1")
+
+@api_v1.get("/menus")
+def get_menus():
+    """모든 메뉴 목록을 반환합니다."""
+    try:
+        # DB에서 메뉴 데이터 조회 (임베딩 제외)
+        response = supabase.table('menus').select('id, name, image_url, price, is_hot, caffeine_mg, sugar_g, description, aliases').execute()
+        
+        if response.data:
+            # 프론트엔드에서 필요한 형식으로 변환
+            menus = []
+            for item in response.data:
+                menu = {
+                    "name": item["name"],
+                    "image": item["image_url"],
+                    "price": item["price"],
+                    "hot": "Y" if item["is_hot"] else "N",
+                    "caffeine": item["caffeine_mg"],
+                    "sugar": item["sugar_g"],
+                    "description": item["description"],
+                    "aka": item["aliases"]
+                }
+                menus.append(menu)
+            
+            return jsonify({"data": menus}), 200
+        else:
+            return jsonify({"error": {"code": "NO_MENUS_FOUND", "message": "메뉴 데이터를 찾을 수 없습니다."}}), 404
+            
+    except Exception as e:
+        logging.getLogger("recommendations").error(f"메뉴 목록 조회 실패: {e}")
+        return jsonify({"error": {"code": "MENU_FETCH_ERROR", "message": "메뉴 목록을 가져오는데 실패했습니다."}}), 500
 
 @api_v1.get("/recommendations")
 def get_recommendations():
