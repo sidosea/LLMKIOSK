@@ -1,8 +1,4 @@
 <<작성중>>
-
----
-1학기 중간 발표 PPT 파일 (테스트 영상 포함)
-https://drive.google.com/drive/folders/1JLLUYqyupj-SW1ZPtVVaN3DOeE09m8KW?usp=sharing
 ---
 
 <img width="1920" height="1080" alt="Image" src="https://github.com/user-attachments/assets/59bf1768-2e90-4d3a-8ece-148b3031f568" />
