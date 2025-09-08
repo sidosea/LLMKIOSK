@@ -1,5 +1,11 @@
 <<작성중>>
 ---
+일지
+https://tin-oak-590.notion.site/1d18d7c109668042950df1845b779f11?source=copy_link
+
+요구분석, DB 설계
+https://tin-oak-590.notion.site/DB-1c38d7c10966803dabddcfc8be44665e?source=copy_link
+---
 
 <img width="1920" height="1080" alt="Image" src="https://github.com/user-attachments/assets/59bf1768-2e90-4d3a-8ece-148b3031f568" />
 <img width="1920" height="1080" alt="Image" src="https://github.com/user-attachments/assets/afba235d-7ca3-4b6b-b3d9-89bf36d7ca1a" />
@@ -162,10 +168,11 @@
 - **서버**: Flask (Python 기반 웹 서버)
 - **음성 인식**: OpenAI Whisper 사용
 - **AI 모델**:
-    - **GPT API**를 활용해 1차 임베딩을 하였으나 추후 Ollama + Docker를 활용하여 **DeepSeek, LLaMA 3** 모델들도 테스트 해볼 계획입니다.
+    - **GPT API**를 활용해 1차 임베딩 완료
+    - 추후 Ollama + Docker를 활용하여 **DeepSeek, LLaMA 3** 모델들도 테스트 해볼 계획입니다.
 - **데이터베이스**:
-    - **ChromaDB** (벡터 데이터 처리)
-    - **MySQL** (일반 데이터 저장)
+    - **PostgreSQL** (벡터 데이터 처리)
+
 
 ---
 
@@ -180,8 +187,3 @@
 
 ---
 
-일지
-https://tin-oak-590.notion.site/1d18d7c109668042950df1845b779f11?source=copy_link
-
-요구분석, DB 설계
-https://tin-oak-590.notion.site/DB-1c38d7c10966803dabddcfc8be44665e?source=copy_link
