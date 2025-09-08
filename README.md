@@ -3,8 +3,7 @@
 일지
 https://tin-oak-590.notion.site/1d18d7c109668042950df1845b779f11?source=copy_link
 
-요구분석, DB 설계
-https://tin-oak-590.notion.site/DB-1c38d7c10966803dabddcfc8be44665e?source=copy_link
+
 ---
 
 <img width="1920" height="1080" alt="Image" src="https://github.com/user-attachments/assets/59bf1768-2e90-4d3a-8ece-148b3031f568" />
@@ -187,3 +186,5 @@ https://tin-oak-590.notion.site/DB-1c38d7c10966803dabddcfc8be44665e?source=copy_
 
 ---
 
+요구분석
+https://tin-oak-590.notion.site/DB-1c38d7c10966803dabddcfc8be44665e?source=copy_link
