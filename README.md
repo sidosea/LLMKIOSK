@@ -6,21 +6,20 @@ https://tin-oak-590.notion.site/1d18d7c109668042950df1845b779f11?source=copy_lin
 
 ---
 
-<img width="1920" height="1080" alt="Image" src="https://github.com/user-attachments/assets/59bf1768-2e90-4d3a-8ece-148b3031f568" />
-<img width="1920" height="1080" alt="Image" src="https://github.com/user-attachments/assets/afba235d-7ca3-4b6b-b3d9-89bf36d7ca1a" />
-<img width="1920" height="1080" alt="Image" src="https://github.com/user-attachments/assets/af2fa443-0f81-4675-9a5b-fbdcd718d2d1" />
-<img width="1920" height="1080" alt="Image" src="https://github.com/user-attachments/assets/8fbd276b-cf4a-4ddd-8aaa-5d2ee8dd4020" />
-<img width="1920" height="1080" alt="Image" src="https://github.com/user-attachments/assets/794bb262-38df-473e-90d2-5e224ffe891d" />
-<img width="1920" height="1080" alt="Image" src="https://github.com/user-attachments/assets/c7e4b500-2869-44cf-bc96-7b977e58065b" />
-<img width="1920" height="1080" alt="Image" src="https://github.com/user-attachments/assets/a9fecb85-f447-4e02-837c-428b18e2558c" />
-<img width="1920" height="1080" alt="Image" src="https://github.com/user-attachments/assets/fc0f9916-2839-43a1-a06b-9845da6569f2" />
-<img width="1920" height="1080" alt="Image" src="https://github.com/user-attachments/assets/2e95a604-ccfd-49e2-a513-9beb7087a9d8" />
-<img width="1920" height="1080" alt="Image" src="https://github.com/user-attachments/assets/e83fd93e-b8c4-4826-a749-48a8d77b9bbe" />
-<img width="1920" height="1080" alt="Image" src="https://github.com/user-attachments/assets/ed140751-91a7-4bad-9592-856b63667915" />
-<img width="1920" height="1080" alt="Image" src="https://github.com/user-attachments/assets/5eeffbab-c6ed-468a-82c1-3530bde27ad7" />
-<img width="1920" height="1080" alt="Image" src="https://github.com/user-attachments/assets/4fcfc7d4-a5c9-4cb8-bfe4-c4547ab73e0d" />
-<img width="1920" height="1080" alt="Image" src="https://github.com/user-attachments/assets/97c987d3-4fc8-423e-ab0b-e2dbae85be8c" />
-<img width="1920" height="1080" alt="Image" src="https://github.com/user-attachments/assets/c325ef5e-8386-4c39-b91f-4e3192365f6f" />
+![Image](https://github.com/user-attachments/assets/8bcb7435-64d9-4dc5-8886-c323543f242c)
+![Image](https://github.com/user-attachments/assets/347dad77-be52-465b-82da-07ff0c735b1a)
+![Image](https://github.com/user-attachments/assets/90907d3a-7b47-46d8-8ce5-a9b802802a7a)
+![Image](https://github.com/user-attachments/assets/d953beb3-cf86-4e47-ab3e-0ac82c086bf2)
+![Image](https://github.com/user-attachments/assets/ddf3052b-7aaf-43e6-b5c4-87ed02a69c8b)
+![Image](https://github.com/user-attachments/assets/1bcf9910-2b66-4fa0-a2a0-50b776942a97)
+![Image](https://github.com/user-attachments/assets/22283683-7a4c-41d8-bf9a-968779463762)
+![Image](https://github.com/user-attachments/assets/ea1031fa-8371-4abc-a558-f65b476d504e)
+![Image](https://github.com/user-attachments/assets/1549fe4d-4c19-4703-89c6-502f7ec2e192)
+![Image](https://github.com/user-attachments/assets/0ba690f0-18c3-41e4-b65d-b64c0589f48a)
+![Image](https://github.com/user-attachments/assets/6085d839-deaa-4046-87e4-bd750fd2c01f)
+![Image](https://github.com/user-attachments/assets/d32c637d-74a3-4d8a-bfda-34113df4ec44)
+![Image](https://github.com/user-attachments/assets/e4263de9-c25e-45eb-9519-847b479c7b74)
+![Image](https://github.com/user-attachments/assets/35ec0c82-ed5a-42ae-8610-79c0ad86a027)
 
 ---
 
@@ -112,7 +111,7 @@ https://tin-oak-590.notion.site/1d18d7c109668042950df1845b779f11?source=copy_lin
 
 ---
 
-# 임베딩이란?
+## 임베딩이란?
 
 지금까지 말씀드린, 이 대화 추론 기능을 어떻게 키오스크에 넣을 것인가에 대한 설명을 드리겠습니다.
 
@@ -130,7 +129,7 @@ https://tin-oak-590.notion.site/1d18d7c109668042950df1845b779f11?source=copy_lin
 
 ---
 
-# 주문을 이해하는 방식
+## 주문을 이해하는 방식
 
 그렇다면 이제 어떤 방식으로 이 프로그램이 동작하는 지에 관하여 설명드리겠습니다.
 
@@ -141,8 +140,20 @@ https://tin-oak-590.notion.site/1d18d7c109668042950df1845b779f11?source=copy_lin
 이렇게 받아진 결과와 기존 명령어를 합친후, 주문에 추가적으로 더 필요한 정보, 사이즈나 포장 여부를 물어본 뒤 주문을 완성합니다.
 
 ---
+## 변경 내용
 
-# 데모
+방학 동안 진행한 내용입니다.
+
+JSON 파일 구조로 동작하던 기존 방식을 PostgreSQL로 마이그레이션 했습니다.
+
+기존에는 MySQL과 Chroma DB로 각각 기본 DB, 벡터값 저장을 따로따로 하려하였으나 데이터 일관성의 문제와 성능 저하의 문제로 벡터값도 처리가 가능한 RDBMS인 PostgreSQL에 PGVector를 설치하여 처리하는 방식으로 변경하였습니다.
+
+개발 환경을 데스크탑과 맥북 두개를 사용하기 때문에 데이터 일관성 문제가 생겨, 이를 해결하기 위해 Supabase를 사용해 DB 호스팅을 받았습니다. 
+
+이외에도 코드의 가독성을 올리기 위해 RESTful API를 적용하는 등 전체적인 코드 리팩토링을 진행하였으며 현재 안정화된 버전으로 MVC 패턴을 적용 및 배포의 편리함을 위해 Docker를 사용하는 과정에 있으며 메인 서버는 컨테이너화를 완료했습니다.
+---
+
+## 데모
 
 첫번째 데모는, 기존 방식대로 AI의 도움 없이 전통적인 방식의 키오스크 주문입니다.
 
@@ -167,21 +178,20 @@ https://tin-oak-590.notion.site/1d18d7c109668042950df1845b779f11?source=copy_lin
 - **서버**: Flask (Python 기반 웹 서버)
 - **음성 인식**: OpenAI Whisper 사용
 - **AI 모델**:
-    - **GPT API**를 활용해 1차 임베딩 완료
-    - 추후 Ollama + Docker를 활용하여 **DeepSeek, LLaMA 3** 모델들도 테스트 해볼 계획입니다.
+    - Open AI Embeddings 를 사용해 벡터 값을 도출
+    - 현재는 GPT를 사용하여 주문 분리 기능을 처리 중
 - **데이터베이스**:
-    - **PostgreSQL** (벡터 데이터 처리)
+    - PostgreSQL (Supabase 호스팅)
+        - PGVector Extension
 
 
 ---
 
-# 진행상황입니다
+## 진행상황입니다
 
-지금까지 요구사항 분석 및 UI 설계를 마치고, 기본적으로 동작할 프론트 엔드 웹,
+모델 최적화 및 리팩토링, DB 마이그레이션은 1차적으로 완료하였으며, Docker를 사용해 컨테이너화가 끝나면 AWS S3을 이용해 프론트 웹 페이지도 배포하여 모바일 환경에서도 사용 가능하도록 확장 예정이며,
 
-그리고 아직 최적화 시키지 않은 임베딩을 적용한 데모까지 완성하였고 교생 활동을 하는 5월중 최대한 임베딩 처리 최적화 및 처리 모듈 적용을 완성시킬 계획이며, 6월 중에는 텍스트 명령을 분리하는 기능까지 만들 예정입니다.
-
-이후 json에서 벡터 데이터베이스인 크로마로 재구축하고, 음성 인식기능을 넣은뒤 ui 개선후 독커와 올라마를 이용해 로컬 llm으로 동작하는 것까지 구현한 뒤 배포 예정입니다.
+기능 측면에서는 음성 주문 처리 기능만 넣으면 마무리 될 예정입니다.
 
 
 ---
