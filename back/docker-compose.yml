@@ -1,0 +1,13 @@
+version: "3.9"
+services:
+  backend:
+    build: .
+    container_name: mainproject-backend
+    env_file:
+      - .env
+    ports:
+      - "5000:5000"
+    restart: unless-stopped
+    # If you ever need to mount code for live dev, uncomment below:
+    # volumes:
+    #   - .:/app:rw
