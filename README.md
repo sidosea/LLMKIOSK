@@ -3,52 +3,25 @@
 일지
 https://tin-oak-590.notion.site/1d18d7c109668042950df1845b779f11?source=copy_link
 
-
+Readme.md 노션에서 읽기
+https://tin-oak-590.notion.site/LLM-26f8d7c1096680ce8937eee3e641bbb7?pvs=73
 ---
+LLM 대화 추론 키오스크
 
-![Image](https://github.com/user-attachments/assets/8bcb7435-64d9-4dc5-8886-c323543f242c)
-![Image](https://github.com/user-attachments/assets/347dad77-be52-465b-82da-07ff0c735b1a)
-![Image](https://github.com/user-attachments/assets/90907d3a-7b47-46d8-8ce5-a9b802802a7a)
-![Image](https://github.com/user-attachments/assets/d953beb3-cf86-4e47-ab3e-0ac82c086bf2)
-![Image](https://github.com/user-attachments/assets/ddf3052b-7aaf-43e6-b5c4-87ed02a69c8b)
-![Image](https://github.com/user-attachments/assets/1bcf9910-2b66-4fa0-a2a0-50b776942a97)
-![Image](https://github.com/user-attachments/assets/22283683-7a4c-41d8-bf9a-968779463762)
-![Image](https://github.com/user-attachments/assets/ea1031fa-8371-4abc-a558-f65b476d504e)
-![Image](https://github.com/user-attachments/assets/1549fe4d-4c19-4703-89c6-502f7ec2e192)
-![Image](https://github.com/user-attachments/assets/0ba690f0-18c3-41e4-b65d-b64c0589f48a)
-![Image](https://github.com/user-attachments/assets/6085d839-deaa-4046-87e4-bd750fd2c01f)
-![Image](https://github.com/user-attachments/assets/d32c637d-74a3-4d8a-bfda-34113df4ec44)
-![Image](https://github.com/user-attachments/assets/e4263de9-c25e-45eb-9519-847b479c7b74)
-![Image](https://github.com/user-attachments/assets/35ec0c82-ed5a-42ae-8610-79c0ad86a027)
+제가 발표할 프로젝트는 **대화 추론형 AI를 적용한 키오스크**입니다 
 
----
+<img width="661" height="379" alt="Image" src="https://github.com/user-attachments/assets/fe8f2c43-00e1-4acf-a35d-c0ed6c2c4800" />
 
-대본
-## **메인**
 
-안녕하세요, 20학번 김현석입니다.
-
-제가 발표할 프로젝트는 **대화 추론형 AI를 적용한 키오스크**입니다.
-
-즉, 사용자가 정해진 명령어를 입력하는 방식이 아니라, **자연스럽게 묘사하는 말만으로도 원하는 주문을 이해하는 키오스크**입니다.
-
----
-
-## **목차**
-
-목차는 **개요, 기능, 구현 방법과 시연, 개발환경, Q&A** 순으로 진행할 예정입니다.
-
----
-
-## 개요
-
- 
+사용자가 정해진 명령어를 입력하는 방식이 아니라, **자연스럽게 묘사하는 말만으로도 원하는 주문을 이해하는 키오스크를 의미합니다.**
 
 ---
 
 ## **선정 배경**
 
 지난 겨울 방학 동안 다양한 국가의 많은 가게의 키오스크를 사용해보면서, 직원에게 주문하는 것보다 불편하게 느껴지는 이유가 무엇일까 고민했습니다.
+
+<img width="988" height="560" alt="Image" src="https://github.com/user-attachments/assets/7dca2d3c-d1e4-4d60-b084-d5cf2028d67b" />
 
 그 결과,
 
@@ -60,9 +33,14 @@ https://tin-oak-590.notion.site/1d18d7c109668042950df1845b779f11?source=copy_lin
 
 ---
 
-## **프랜차이즈마다 다른 이름**
+## **프로젝트의 주요 기능**
 
-사례를 하나 가져와 말씀드리겠습니다.
+<img width="549" height="436" alt="Image" src="https://github.com/user-attachments/assets/5bccbbd3-f410-4ef6-abd7-a7b9ad865bbf" />
+
+---
+
+## **프랜차이즈마다 다른 이름**
+<img width="1021" height="512" alt="Image" src="https://github.com/user-attachments/assets/d0ab864a-5ce4-4f70-817a-3eb1c5aa86bf" />
 
 예를 들어, 한 할아버지가 믹스커피 맛이 나는 음료를 마시고 싶어서 카페에 들어갔다고 가정해 보겠습니다.
 
@@ -72,7 +50,7 @@ https://tin-oak-590.notion.site/1d18d7c109668042950df1845b779f11?source=copy_lin
 
 이런 문제는 디지털 취약 계층만 겪는 것이 아닙니다.
 
-## **미드나잇 베르가못 콜드브루**
+<img width="517" height="610" alt="Image" src="https://github.com/user-attachments/assets/2044033f-a6c5-4312-a46f-7723a43a2480" />
 
 스타벅스에서 신메뉴가 나왔을 때, 정확한 이름을 기억하지 못해 **"미드나잇 버... 어 뭐지? 그 보라색 신메뉴 주세요."**
 
@@ -86,40 +64,23 @@ https://tin-oak-590.notion.site/1d18d7c109668042950df1845b779f11?source=copy_lin
 
 ---
 
-## 프로젝트 기능
-
-1. 자연어 기반의 인터페이스로 누구나 손쉽게 사용 가능
-2. 직관적인 AI
-3. 음성인식 지원(예정)
-
----
-
 ## **기대 효과**
 
-**대화 추론형 AI 키오스크**를 도입할 경우,
+**가게에 대화 추론형 AI 키오스크**를 도입할 경우
 
-- **손님 입장**
-    - 사용자 경험 향상
-    - 대기 시간 단축
-    - 접근성 개선
-- **사장 입장**
-    - 생소한 메뉴라도 진입장벽이 낮아져 추천 메뉴와 더불어 주문 증가
-    - UX 향상으로 인한 재방문율 증가
-    - AI가 다국어(한국어, 일본어, 중국어, 영어, 스페인어, 독일어 등)를 지원하여 외국어 능력이 부족해도 다양한 국가의 손님을 받을 수 있음
-
-이러한 장점이 기대됩니다.
+<img width="976" height="525" alt="Image" src="https://github.com/user-attachments/assets/0719e18d-b7e2-4b18-885f-f13878e5564d" />
 
 ---
 
-## 임베딩이란?
-
-지금까지 말씀드린, 이 대화 추론 기능을 어떻게 키오스크에 넣을 것인가에 대한 설명을 드리겠습니다.
-
-설명하기에 앞서, 임베딩이란 컴퓨터가 이해할 수 있게 자연어를 벡터값으로 변환한 것을 의미합니다.
+# 임베딩이란?
+<img width="618" height="237" alt="Image" src="https://github.com/user-attachments/assets/8c2b6239-3b26-460b-bc42-81adb036c661" />
+<img width="548" height="332" alt="Image" src="https://github.com/user-attachments/assets/79bcb56f-05d3-4552-bc4c-fb6921511443" />
 
 이 벡터 값을 활용하면 각 문자들 사이의 유사도에 대해 측정할 수 있는데, 망고 바나나 고양이 이 3가지 단어의 유사도를 좌표 평면에 나타내면 망고와 바나나는 유사하지만 고양이는 멀리 떨어져 있는 것을 볼 수있습니다.
 
 즉 망고와 바나나는 과일이라는 속성을 갖고있기에 비슷한 값을 지니는데, 이러한 데이터를 바탕으로한 서비스에 “사과주스 있어?”라고 물어보면 “망고나 바나나는 있습니다”라는 답변을 들을 수 있다는 것입니다.
+
+<img width="576" height="458" alt="Image" src="https://github.com/user-attachments/assets/8f010a4b-c8b8-453b-a2c6-85c1d14bf7bf" />
 
 그렇다면 기준축이 두개 이상인 경우는 어떨까요?
 
@@ -129,22 +90,45 @@ https://tin-oak-590.notion.site/1d18d7c109668042950df1845b779f11?source=copy_lin
 
 ---
 
-## 주문을 이해하는 방식
+# 임베딩 적용
+
+<img width="405" height="206" alt="Image" src="https://github.com/user-attachments/assets/49f052cf-9d75-4b48-b9b9-376c3f3e3027" />
+먼저 삽입할 데이터를 JSON 형식에 맞춰 생성합니다.
+
+<img width="725" height="309" alt="Image" src="https://github.com/user-attachments/assets/0497ed8a-643b-4aac-95d9-96a552f0091e" />
+
+이 정보를 chatGPT API를 사용하여 AI에게 바리스타라는 역할과 설명을 만드는 프롬프트를 사용해
+
+`menu_description.py`를 사용하여 JSON 파일을 새로 생성합니다.
+
+<img width="664" height="165" alt="Image" src="https://github.com/user-attachments/assets/0af2a1bb-daa8-46af-9cfb-b172156f0fbb" />
+
+이렇게 생성된 텍스트 파일을 `advanced_embeddings.py`에서 OpenAI의 `text-embedding-ada-002` 모델을 사용해 임베딩합니다.
+
+
+<img width="420" height="190" alt="Image" src="https://github.com/user-attachments/assets/21bc2c10-fa67-4151-9ec9-cfa1a53f4a2f" />
+
+*완성된 벡터 값*
+
+---
+
+# 주문을 이해하는 방식
 
 그렇다면 이제 어떤 방식으로 이 프로그램이 동작하는 지에 관하여 설명드리겠습니다.
 
-먼저 사용자가 음성인식 API 혹은 키보드를 활용하여 자연어를 통해 주문하면, 이를 LLM이 받아 사용자의 주문중, 임베딩이 필요한 단어와 그 자체로 명령어인 것을 분리합니다.
+<img width="941" height="808" alt="Image" src="https://github.com/user-attachments/assets/9596cdbd-6cca-4ffe-8866-5af801defd85" />
+
+먼저 사용자가 음성인식 혹은 키보드를 활용하여 자연어를 통해 주문하면, 이를 LLM이 받아 사용자의 주문중, 임베딩이 필요한 단어와 그 자체로 명령어인 것을 분리합니다.
 
 분리된 단어는 그자리에서 임베딩 한후, 미리 임베딩 해둔 벡터값을 저장한 DB에서 가장 유사한 값을 가진 메뉴를 탐색 후 출력합니다.
 
-이렇게 받아진 결과와 기존 명령어를 합친후, 주문에 추가적으로 더 필요한 정보, 사이즈나 포장 여부를 물어본 뒤 주문을 완성합니다.
+이렇게 받아진 결과와 기존 명령어를 합친후 완성된 영수증을 출력합니다.
 
 ---
-## 변경 내용
 
-방학 동안 진행한 내용입니다.
+### 최근 변경 사항 (25.09 기준)
 
-JSON 파일 구조로 동작하던 기존 방식을 PostgreSQL로 마이그레이션 했습니다.
+JSON 파일 구조로 동작하던 기존 방식을 PostgreSQL로 마이그레이션 했습니다.(`moveToPostgreSQL.py`)
 
 기존에는 MySQL과 Chroma DB로 각각 기본 DB, 벡터값 저장을 따로따로 하려하였으나 데이터 일관성의 문제와 성능 저하의 문제로 벡터값도 처리가 가능한 RDBMS인 PostgreSQL에 PGVector를 설치하여 처리하는 방식으로 변경하였습니다.
 
@@ -152,51 +136,15 @@ JSON 파일 구조로 동작하던 기존 방식을 PostgreSQL로 마이그레�
 
 이외에도 코드의 가독성을 올리기 위해 RESTful API를 적용하는 등 전체적인 코드 리팩토링을 진행하였으며 현재 안정화된 버전으로 MVC 패턴을 적용 및 배포의 편리함을 위해 Docker를 사용하는 과정에 있으며 메인 서버는 컨테이너화를 완료했습니다.
 
-
----
-
-## 데모
-
-첫번째 데모는, 기존 방식대로 AI의 도움 없이 전통적인 방식의 키오스크 주문입니다.
-
-평범하게 메뉴 창에 들어가, 메뉴를 선택하고, 필요한 정보를 입력한뒤 결제합니다.
-
-다음은 임베딩을 적용한 LLM을 활용한 주문입니다.
-
-‘조 카인드 스누피 초코 카라멜 프라푸치노’라는 이름도 어려운 음료를 주문한다고 했을때,
-
-제가 알고 있는 정보는 스누피 콜라보 메뉴라는 점입니다. 따라서 스누피만 검색하여 주문해보겠습니다.
-
-(진행중) 다음으로 ‘제주 말차 크림 프라푸치노’입니다. 녹차와 비슷한 음료라고 생각하고 녹차만 검색해보겠습니다.
-
-제가 원하는 프라푸치노가 아니라 말차라떼가 나왔네요, 이처럼 자연어를 주문하면 정확성이 떨어지기 때문에 그다음으로 유사도가 높은 메뉴를 추천합니다..
-
-이외에도 아아 라고 검색하면 아메리카노, 빨간거 라고 검색하면 딸기 음료, 잘팔리는 것 등 다양한 속성값을 임베딩하여 간단한 묘사로도 사람에게 말하는 것 그 이상으로 원하는 메뉴를 추천 받을 수 있습니다
-
 ---
 
 ## **개발 환경**
 
 - **서버**: Flask (Python 기반 웹 서버)
-- **음성 인식**: OpenAI Whisper 사용
+- **음성 인식**: OpenAI Whisper 사용 예정
 - **AI 모델**:
     - Open AI Embeddings 를 사용해 벡터 값을 도출
     - 현재는 GPT를 사용하여 주문 분리 기능을 처리 중
 - **데이터베이스**:
     - PostgreSQL (Supabase 호스팅)
         - PGVector Extension
-
-
----
-
-## 진행상황입니다
-
-모델 최적화 및 리팩토링, DB 마이그레이션은 1차적으로 완료하였으며, Docker를 사용해 컨테이너화가 끝나면 AWS S3을 이용해 프론트 웹 페이지도 배포하여 모바일 환경에서도 사용 가능하도록 확장 예정이며,
-
-기능 측면에서는 음성 주문 처리 기능만 넣으면 마무리 될 예정입니다.
-
-
----
-
-요구분석
-https://tin-oak-590.notion.site/DB-1c38d7c10966803dabddcfc8be44665e?source=copy_link
