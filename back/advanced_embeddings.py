@@ -22,8 +22,8 @@ def menu_to_text(item):
     description = item.get("description", "")
     aka = ", ".join(item.get("aka", []))
     hot = "따뜻" if item.get("hot", "Y") == "Y" else "차가움"
-    caffeine = item.get("caffine", 0)
-    sugar = item.get("suger", 0)
+    caffeine = item.get("caffeine", 0)
+    sugar = item.get("sugar", 0)
 
     return f"메뉴 이름: {name}. {description} 별명: {aka}. 이 음료는 {hot}하며, 카페인은 {caffeine}mg, 당은 {sugar}g입니다."
 
