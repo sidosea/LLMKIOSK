@@ -3,7 +3,8 @@
 const cart = {};
 
 //배포 후 연결 || 로컬에서 테스트
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+// const API_BASE_URL = 'http://localhost:5000';
+const API_BASE_URL = 'http://kiosk-server-env.eba-as7cmwjg.ap-northeast-2.elasticbeanstalk.com';
 
 // 가격 포맷
 function formatPrice(price) {
