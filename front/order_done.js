@@ -3,7 +3,7 @@ $(document).ready(function () {
   $("#order-number").text(orderNumber);
 // 결제 방식 클릭 이벤트
   $("#order-done").on("click", function () {
-     window.location.href = "Frontpage.html";
+     window.location.href = "index.html";
   });
 
   // 5초 후 자동으로 메인 페이지로 이동
