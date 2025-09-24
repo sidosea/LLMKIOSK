@@ -2,6 +2,9 @@
 // 전역 장바구니 객체
 const cart = {};
 
+//배포 후 연결 || 로컬에서 테스트
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+
 // 가격 포맷
 function formatPrice(price) {
   return "₩" + price.toLocaleString();
@@ -183,7 +186,7 @@ function removeFromCart(name) {
 }
 
 function loadMenu() {
-  fetch("http://localhost:5000/api/v1/menus")
+  fetch("${API_BASE_URL}/api/v1/menus")
     .then((res) => res.json())
     .then((response) => {
       if (response.data) {
@@ -203,7 +206,7 @@ function displayRecommendations(recs) {
   $box.empty().removeClass("d-none");
 
   // API에서 메뉴 정보 가져오기
-  fetch("http://localhost:5000/api/v1/menus")
+  fetch("${API_BASE_URL}/api/v1/menus")
     .then(res => res.json())
     .then(response => {
       if (!response.data) {
@@ -272,7 +275,7 @@ function displayRecommendations(recs) {
         if (text === "") return;
 
         $.ajax({ //RESTful 적용 반영
-            url: "http://localhost:5000/api/v1/recommendations",
+            url: "${API_BASE_URL}/api/v1/menus",
             type: "POST",
             contentType: "application/json",
             data: JSON.stringify({ query: text, temperature: null, quantity: 1 }),
