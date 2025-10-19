@@ -1,0 +1,17 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python: mainserver_v3_DB",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/back/mainserver_v3_DB.py",
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}/back",
+            "python": "${workspaceFolder}/back/venv/bin/python"
+        }
+    ]
+}
+
+
+
