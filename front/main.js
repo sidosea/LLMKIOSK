@@ -3,8 +3,8 @@
 const cart = {};
 
 //배포 후 연결 || 로컬에서 테스트
-// const API_BASE_URL = 'http://localhost:5000';
-const API_BASE_URL = 'https://kiosk-server-env.eba-as7cmwjg.ap-northeast-2.elasticbeanstalk.com';
+const API_BASE_URL = 'http://localhost:5001';
+// const API_BASE_URL = 'https://kiosk-server-env.eba-as7cmwjg.ap-northeast-2.elasticbeanstalk.com';
 
 // 가격 포맷
 function formatPrice(price) {
@@ -276,7 +276,7 @@ function displayRecommendations(recs) {
         if (text === "") return;
 
         $.ajax({ //RESTful 적용 반영
-            url: `${API_BASE_URL}/api/v1/menus`,
+            url: `${API_BASE_URL}/api/v1/recommendations`,
             type: "POST",
             contentType: "application/json",
             data: JSON.stringify({ query: text, temperature: null, quantity: 1 }),
