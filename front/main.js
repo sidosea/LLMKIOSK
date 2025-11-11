@@ -151,6 +151,42 @@ function updateCart() {
 
   $cartTotal.text(total > 0 ? `총액: ${formatPrice(total)}` : "장바구니가 비었습니다");
   $cartCount.text(count);
+
+  // 인라인 패널도 갱신
+  const $panel = $("#cart-panel");
+  const $panelItems = $("#cart-panel-items");
+  const $panelTotal = $("#cart-panel-total");
+  if ($panel.length) {
+    $panelItems.empty();
+    if (count === 0) {
+      $panel.addClass("d-none");
+      $panelTotal.text("총액: \\0");
+    } else {
+      $panel.removeClass("d-none");
+      // 항목 렌더링
+      $.each(cart, function (name, item) {
+        const itemTotal = item.price * item.quantity;
+        const $row = $(`
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <div class="d-flex align-items-center">
+              <img src="img/${item.image}" alt="${name}" class="me-2" style="width: 36px; height: 36px; object-fit: cover;">
+              <div>
+                <div>${name}</div>
+                <div class="text-muted small">${formatPrice(item.price)} x ${item.quantity}</div>
+              </div>
+            </div>
+            <div class="d-flex align-items-center">
+              <button class="btn btn-sm btn-outline-secondary me-2 decrease-btn" data-name="${name}">-</button>
+              <button class="btn btn-sm btn-outline-secondary me-2 increase-btn" data-name="${name}">+</button>
+              <button class="btn btn-sm btn-danger remove-btn" data-name="${name}">삭제</button>
+            </div>
+          </div>
+        `);
+        $panelItems.append($row);
+      });
+      $panelTotal.text(`총액: ${formatPrice(total)}`);
+    }
+  }
 }
 
 function showToast(itemName) {
@@ -267,42 +303,101 @@ function displayRecommendations(recs) {
           displayRecommendations(newList);
         }
       });
+
+      // 추천 섹션으로 스무스 스크롤
+      const boxEl = $box.get(0);
+      if (boxEl) {
+        boxEl.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
     });
 }
 
-  // 텍스트 전송 함수
-    function sendText() {
-        let text = $("#textInput").val().trim();
-        if (text === "") return;
+  // 텍스트 기반 주문 → 장바구니 담기
+  function sendText() {
+    let text = $("#textInput").val().trim();
+    if (text === "") return;
 
-        $.ajax({ //RESTful 적용 반영
-            url: `${API_BASE_URL}/api/v1/recommendations`,
-            type: "POST",
-            contentType: "application/json",
-            data: JSON.stringify({ query: text, temperature: null, quantity: 1 }),
-            success: function (response) {
-                // 새 포맷 : data: { intent, recommendations }}
-                const data = response && response.data;
-                if (!data) { //에러 메세지 백->프론트로 이동
-                    $("#responseText").text("응답 형식이 올바르지 않습니다.");
-                    return;
-                }
-                //response 백-> 프론트로 이동
-              $("#responseText").text("추천 메뉴를 안내해드릴게요!");
-              $("#textInput").val("");
+    $.ajax({
+      url: `${API_BASE_URL}/api/v1/orders/text`,
+      type: "POST",
+      contentType: "application/json",
+      data: JSON.stringify({ text }),
+      success: function (response) {
+        const data = response && response.data;
+        if (!data || !data.match) {
+          $("#responseText").text("응답 형식이 올바르지 않습니다.");
+          return;
+        }
 
-              if (data.recommendations && data.recommendations.length > 0) {
-                displayRecommendations(data.recommendations);
-              }
-            },
-            error: function (xhr) { //RESTful 표준 에러 처리
-                const errMsg =
-                (xhr.responseJSON && xhr.responseJSON.error && xhr.responseJSON.error.message) ||
-                "서버와 연결할 수 없습니다.";      
-                $("#responseText").text(errMsg);
+        const intent = data.intent || {};
+        const match = data.match || {};
+        const quantity = parseInt(intent.quantity || 1, 10) || 1;
+        const temperature = intent.temperature === "hot" ? "hot" : "ice";
+
+        // 메뉴 목록에서 상세 정보 보강
+        fetch(`${API_BASE_URL}/api/v1/menus`)
+          .then(res => res.json())
+          .then(menuRes => {
+            let menuItem = null;
+            if (menuRes && menuRes.data) {
+              menuItem = menuRes.data.find(item => item.name === match.name);
             }
-        });
-}
+            // 서버 응답을 기반으로 최소 필드 구성 (fallback)
+            const resolvedItem = menuItem || {
+              name: match.name,
+              image: match.image || "placeholder.png",
+              price: match.unitPrice || 0,
+              description: ""
+            };
+
+            // 장바구니 담기
+            const key = `${resolvedItem.name} (${temperature === "hot" ? "따뜻하게" : "차갑게"})`;
+            if (cart[key]) {
+              cart[key].quantity += quantity;
+            } else {
+              cart[key] = {
+                ...resolvedItem,
+                name: key,
+                quantity: quantity
+              };
+            }
+            updateCart();
+            showToast(resolvedItem.name);
+
+            $("#responseText").text(`🛒 "${match.name}"를 장바구니에 담았습니다.`);
+            $("#textInput").val("");
+
+            // 추천 박스 표시: 가장 가까운 결과 + 2개 후보
+            const recPayload = {
+              query: intent.query || match.name,
+              temperature: intent.temperature || null,
+              quantity: intent.quantity || 1
+            };
+            $.ajax({
+              url: `${API_BASE_URL}/api/v1/recommendations`,
+              type: "POST",
+              contentType: "application/json",
+              data: JSON.stringify(recPayload),
+              success: function (recRes) {
+                const recData = recRes && recRes.data;
+                if (recData && Array.isArray(recData.recommendations) && recData.recommendations.length) {
+                  displayRecommendations(recData.recommendations);
+                }
+              }
+            });
+          })
+          .catch(() => {
+            $("#responseText").text("메뉴 정보를 가져오지 못했습니다.");
+          });
+      },
+      error: function (xhr) {
+        const errMsg =
+          (xhr.responseJSON && xhr.responseJSON.error && xhr.responseJSON.error.message) ||
+          "서버와 연결할 수 없습니다.";
+        $("#responseText").text(errMsg);
+      }
+    });
+  }
 
 // 메인 실행
 $(document).ready(function () {
@@ -382,10 +477,17 @@ $(document).ready(function () {
 
   // 장바구니 기능
   $("#cart-button").on("click", function () {
-    new bootstrap.Modal($("#cartModal")[0]).show();
+    const panel = document.getElementById("cart-panel");
+    if (panel && !panel.classList.contains("d-none")) {
+      panel.scrollIntoView({ behavior: "smooth", block: "start" });
+    } else {
+      // 비어있으면 토스트만
+      $("#responseText").text("장바구니가 비어 있습니다.");
+    }
   });
 
   $("#clear-cart").on("click", clearCart);
+  $("#cart-panel-clear").on("click", clearCart);
 
   $("#cart-items").on("click", ".decrease-btn", function () {
     decreaseQuantity($(this).data("name"));
@@ -394,6 +496,15 @@ $(document).ready(function () {
     increaseQuantity($(this).data("name"));
   });
   $("#cart-items").on("click", ".remove-btn", function () {
+    removeFromCart($(this).data("name"));
+  });
+  $("#cart-panel-items").on("click", ".decrease-btn", function () {
+    decreaseQuantity($(this).data("name"));
+  });
+  $("#cart-panel-items").on("click", ".increase-btn", function () {
+    increaseQuantity($(this).data("name"));
+  });
+  $("#cart-panel-items").on("click", ".remove-btn", function () {
     removeFromCart($(this).data("name"));
   });
 

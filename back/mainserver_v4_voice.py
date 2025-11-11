@@ -127,7 +127,6 @@ try:
         print("메뉴 데이터가 빈칸, 서버를 종료.")
         exit(1)
 
-    menu_dict = {item["name"]: item for item in menu_data}
     print(f"데이터 로드 완료: 총 {len(menu_data)}개 메뉴")
 except Exception as e:
     print(f"데이터 로드 실패, 서버 시작 불가 : {e}")
@@ -167,6 +166,36 @@ def _compute_recommendations(query_text):
 
 # Blueprint 적용
 api_v1 = Blueprint("api_v1", __name__, url_prefix="/api/v1")
+
+def _find_best_menu_match(query_text):
+    """입력 텍스트로 가장 유사한 메뉴 한 개를 반환합니다."""
+    if not menu_data:
+        return None, 0.0
+    user_embedding = get_embedding(query_text)
+    if not user_embedding:
+        return None, 0.0
+    best_item = None
+    best_score = -1.0
+    for item in menu_data:
+        sim = cosine_similarity([user_embedding], [item["embedding"]])[0][0]
+        if sim > best_score:
+            best_score = sim
+            best_item = item
+    return best_item, float(best_score)
+
+def _parse_order_from_text(text):
+    """자연어에서 의도와 수량을 추출합니다."""
+    intent = extract_user_intent(text)
+    query = intent.get("query") or text
+    quantity = intent.get("quantity") or 1
+    try:
+        quantity = int(quantity)
+    except Exception:
+        quantity = 1
+    if quantity <= 0:
+        quantity = 1
+    temperature = intent.get("temperature")
+    return {"query": query, "quantity": quantity, "temperature": temperature}
 
 @api_v1.get("/menus")
 def get_menus():
@@ -238,6 +267,39 @@ def post_recommendations():
         "data": {
             "intent": {"query": query, "temperature": temperature, "quantity": quantity},
             "recommendations": recommendations
+        }
+    }), 200
+
+@api_v1.post("/orders/text")
+def create_order_from_text():
+    """자연어 입력(예: '아아 2잔 줘')으로 주문을 생성하고 결제 진입 정보를 반환합니다."""
+    body = request.get_json(silent=True) or {}
+    text = body.get("text")
+    if not text:
+        return jsonify({"error": {"code": "VALIDATION_ERROR", "message": "text is required"}}), 400
+
+    # 의도/수량 파싱
+    parsed = _parse_order_from_text(text)
+    query = parsed["query"]
+    quantity = parsed["quantity"]
+    temperature = parsed["temperature"]
+
+    # 메뉴 매칭
+    matched_menu, score = _find_best_menu_match(query)
+    if not matched_menu:
+        return jsonify({"error": {"code": "MENU_NOT_FOUND", "message": "해당하는 메뉴를 찾지 못했습니다."}}), 404
+
+    return jsonify({
+        "data": {
+            "intent": {"query": query, "temperature": temperature, "quantity": quantity},
+            "match": {
+                "menuId": matched_menu.get("id"),
+                "name": matched_menu.get("name"),
+                "unitPrice": matched_menu.get("price") or 0,
+                "image": matched_menu.get("image_url"),
+                "temperature": temperature
+            },
+            "similarityScore": score
         }
     }), 200
 

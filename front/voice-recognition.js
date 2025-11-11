@@ -20,7 +20,7 @@ class VoiceRecognition {
 
         // 설정
         this.recognition.continuous = false; // 한 번만 인식
-        this.recognition.interimResults = false; // 최종 결과만
+        this.recognition.interimResults = true; // 최종 결과가 나오는 즉시 트리거
         this.recognition.lang = 'ko-KR'; // 한국어
         this.recognition.maxAlternatives = 1; // 최고 결과만
 
@@ -32,9 +32,32 @@ class VoiceRecognition {
         };
 
         this.recognition.onresult = (event) => {
-            const transcript = event.results[0][0].transcript;
-            console.log('인식된 텍스트:', transcript);
-            this.onResult(transcript);
+            // 가장 최근 결과에서 final 문장만 전송
+            for (let i = event.resultIndex; i < event.results.length; i++) {
+                const result = event.results[i];
+                if (result.isFinal) {
+                    const transcript = result[0].transcript;
+                    console.log('인식된 최종 텍스트:', transcript);
+                    this.onResult(transcript);
+                    // 인식 결과를 입력창에 채운 후 자동 전송
+                    try {
+                        if (typeof window.sendText === 'function') {
+                            // 메인 스레드 이벤트 루프에 태워 UI 업데이트 후 호출
+                            setTimeout(() => window.sendText(), 0);
+                        }
+                    } catch (e) {
+                        console.error('자동 전송 중 오류:', e);
+                    }
+                    break;
+                }
+            }
+        };
+
+        // 사용자가 말을 멈추면 즉시 종료하여 타임아웃 대기 최소화
+        this.recognition.onspeechend = () => {
+            try {
+                this.recognition.stop();
+            } catch {}
         };
 
         this.recognition.onerror = (event) => {
