@@ -6,7 +6,7 @@ import time
 openai.api_key = "API_KEY"
 
 # 메뉴 JSON 불러오기
-with open("menu.json", "r", encoding="utf-8") as f:
+with open("front\menu.json", "r", encoding="utf-8") as f:
     menu_items = json.load(f)
 
 # 메뉴 설명 생성 함수
@@ -36,7 +36,7 @@ for item in menu_items:
         time.sleep(1)  # API rate limit 방지
 
 # 저장
-with open("menu_with_description.json", "w", encoding="utf-8") as f:
+with open("front\menu_with_description.json", "w", encoding="utf-8") as f:
     json.dump(menu_items, f, ensure_ascii=False, indent=2)
 
 print("description 추가 완료!")
