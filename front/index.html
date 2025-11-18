@@ -4,38 +4,122 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>##카페</title>
-        <link href="css/Detail.css" rel="stylesheet" />
+        <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" />
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+        <link href="css/home-figma.css" rel="stylesheet" />
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-        <style>
-          /* 인라인 장바구니 패널: 우상단 플로팅 */
-          #cart-panel {
-            position: fixed;
-            top: 90px;             /* 상단바 높이에 맞춰 조정 */
-            right: 16px;
-            width: 360px;          /* 요청: 가로 길이 지정 */
-            max-height: 70vh;      /* 내용 많을 때 스크롤 */
-            overflow: auto;
-            z-index: 1040;         /* 모달 등보다 위 */
-          }
-          @media (max-width: 576px) {
-            #cart-panel {
-              width: 90vw;
-              right: 5vw;
-              top: 80px;
-            }
-          }
-        </style>
     </head>
-    <body>
-        <!-- 상단 로고 및 언어 선택 -->
-        <div class="top-bar d-flex justify-content-between align-items-center p-3">
-            <div class="logo"><img src="img/logo.png" /></div>
-            <button class="btn btn-light">🌍Language</button>
-            <button class="btn btn-primary position-relative" id="cart-button">
-                🛒 장바구니 <span class="badge bg-danger" id="cart-count">0</span>
-            </button>
+    <body class="figma-body">
+        <div class="figma-bg">
+            <main class="kiosk-shell" role="main">
+                <header class="kiosk-header">
+                    <img
+                        src="https://www.figma.com/api/mcp/asset/60c75f60-7dfc-4de8-b85d-fedad8be46f1"
+                        alt="스타벅스 로고"
+                        class="logo-mark" />
+                    <div class="header-actions">
+                        <button type="button" class="language-btn">LANGUAGE</button>
+                    </div>
+                </header>
+
+                <section class="hero">
+                    <div class="hero-copy">
+                        <h1>어서오세요<br />주문하시겠어요?</h1>
+                        <p class="eyebrow">[이벤트] 2025 WINTER e-FREQUENCY</p>
+                    </div>
+                    <div class="hero-visual">
+                        <img
+                            src="https://www.figma.com/api/mcp/asset/317cb66e-cacc-45e3-8c56-e677e07f0b34"
+                            alt="2025 WINTER e-FREQUENCY 프로모션" />
+                    </div>
+                </section>
+
+                <section class="promo-panel">
+                    <div class="input-row input-row-large">
+                        <input
+                            type="text"
+                            id="textInput"
+                            class="prompt-input"
+                            placeholder="시원한 아메리카노 한잔 어떠세요?"
+                            aria-label="주문을 입력해주세요" />
+                        <button type="button" class="mic-btn" id="voiceBtn" aria-label="음성으로 주문하기">
+                            🎤
+                        </button>
+                    </div>
+                </section>
+
+                <section class="action-grid">
+                    <button type="button" id="sendBtn" class="action-card action-card-dark">
+                        <p class="action-title">주문하기</p>
+                        <p class="action-desc">담으신 메뉴를 바로 주문하세요</p>
+                    </button>
+                    <button type="button" id="menuBtn" class="action-card action-card-dark">
+                        <p class="action-title">메뉴보기</p>
+                        <p class="action-desc">스타벅스의 특별한 메뉴를 살펴보세요</p>
+                    </button>
+                </section>
+
+                <section class="order-card" aria-live="polite">
+                    <div class="order-card__top">
+                        <div class="order-card__summary">
+                            <p class="order-label">주문내역</p>
+                            <div id="order-card-items" class="order-card__list">
+                                <p class="order-item order-empty">담긴 메뉴가 없습니다</p>
+                            </div>
+                        </div>
+                        <p class="order-total" id="order-card-total">₩0</p>
+                    </div>
+                    <div class="order-card__body">
+                        <div class="order-selected">
+                            <p class="order-selected-name" id="order-selected-name">담긴 메뉴가 없습니다</p>
+                            <p class="order-selected-meta" id="order-selected-meta">메뉴를 담아주세요</p>
+                        </div>
+                        <div class="quantity-control">
+                            <button type="button" class="qty-btn" id="order-card-minus" aria-label="수량 줄이기">
+                                <img
+                                    src="https://www.figma.com/api/mcp/asset/8068785f-5ee8-4635-a1e3-5baff2b2862f"
+                                    alt=""
+                                    aria-hidden="true" />
+                            </button>
+                            <span class="qty-value" id="order-card-qty">0</span>
+                            <button type="button" class="qty-btn" id="order-card-plus" aria-label="수량 늘리기">
+                                <img
+                                    src="https://www.figma.com/api/mcp/asset/d43bb382-856e-4227-a065-6b6cb1578784"
+                                    alt=""
+                                    aria-hidden="true" />
+                            </button>
+                        </div>
+                        <div class="order-card__actions">
+                            <button type="button" class="ghost-btn" id="order-card-cancel">주문취소</button>
+                            <button type="button" class="solid-btn btn btn-success" id="order-card-checkout">주문하기</button>
+                        </div>
+                    </div>
+                    <p id="responseText" class="order-status">서버로부터 응답 대기중</p>
+                </section>
+
+                <div id="recommendation-shell" class="recommendation-shell d-none" aria-live="polite">
+                    <section class="collab-section" id="collab-section">
+                        <p class="collab-title" id="collab-title">
+                            추천을 받으려면 주문을 입력해주세요.
+                        </p>
+                        <div class="collab-card" id="collab-card">
+                            <p class="placeholder-text">추천을 받으려면 주문을 입력해주세요.</p>
+                        </div>
+                    </section>
+
+                    <section class="special-section" id="special-section">
+                        <p class="special-title">
+                            특별한 추천 메뉴<span class="text-muted">를 안내드릴게요</span>
+                        </p>
+                        <div id="recommendation-list" class="recommendation-list"></div>
+                    </section>
+                </div>
+
+            </main>
         </div>
+
         <!-- 장바구니 모달 -->
         <div class="modal fade" id="cartModal" tabindex="-1" aria-labelledby="cartModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-scrollable">
@@ -53,43 +137,47 @@
                 </div>
             </div>
         </div>
+
         <!-- 메뉴 상세 모달 -->
         <div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="detailModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title fw-bold" id="detailModalLabel">메뉴 이름</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="닫기"></button>
-                    </div>
-                    <div class="modal-body">
-                        <img id="detail-image" src="img/placeholder.jpg" alt="메뉴 이미지" />
-
-                        <p id="detail-description" class="text-muted"></p>
-
-                        <div class="mb-3">
-                            <label class="form-label fw-bold">온도 선택</label>
-                            <div id="hot-ice-options" class="btn-group" role="group" aria-label="온도 선택 옵션"></div>
+                <div class="modal-content detail-modal">
+                    <button type="button" class="btn-close ms-auto me-2 mt-2" data-bs-dismiss="modal" aria-label="닫기"></button>
+                    <div class="modal-body detail-modal__body">
+                        <div class="detail-visual">
+                            <img id="detail-image" src="img/placeholder.jpg" alt="메뉴 이미지" />
                         </div>
+                        <div class="detail-info">
+                            <h3 id="detailModalLabel">메뉴 이름</h3>
+                            <p id="detail-description" class="detail-description"></p>
+                            <p class="detail-price" id="detail-price">₩0</p>
 
-                        <div class="mb-3">
-                            <label class="form-label fw-bold">수량</label>
-                            <div class="input-group">
-                                <button class="btn btn-outline-secondary" id="qty-minus" type="button">-</button>
-                                <input
-                                    type="text"
-                                    id="qty-input"
-                                    class="form-control text-center"
-                                    value="1"
-                                    readonly
-                                    aria-label="수량 입력" />
-                                <button class="btn btn-outline-secondary" id="qty-plus" type="button">+</button>
+                            <div class="detail-group">
+                                <p class="detail-label">필수 선택</p>
+                                <div class="pill-group" id="hot-ice-options" role="group" aria-label="온도 선택 옵션"></div>
+                            </div>
+
+                            <div class="detail-group">
+                                <p class="detail-label">선택 사항</p>
+                                <div class="pill-group optional-group">
+                                    <button type="button" class="pill-btn option-pill" id="option-mild">연하게</button>
+                                    <div class="pill-btn shot-pill">
+                                        <div>
+                                            <p class="shot-label">샷 추가 <span class="shot-price">+500</span></p>
+                                            <div class="shot-controls" role="group" aria-label="샷 추가 조절">
+                                                <button type="button" class="shot-btn" id="shots-minus" aria-label="샷 수 줄이기">-</button>
+                                                <span id="shots-value" class="shot-value">0</span>
+                                                <button type="button" class="shot-btn" id="shots-plus" aria-label="샷 수 늘리기">+</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-
-                        <p class="fw-bold text-primary mt-3 mb-0" id="detail-price">₩0</p>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-success w-100" id="add-to-cart-detail">🛒 담기</button>
+                    <div class="modal-footer detail-actions">
+                        <button type="button" class="ghost-btn detail-cart-btn" id="add-to-cart-detail">장바구니에 담기</button>
+                        <button type="button" class="solid-btn detail-pay-btn" id="detail-pay-now">바로 결제하기</button>
                     </div>
                 </div>
             </div>
@@ -114,51 +202,6 @@
             </div>
         </div>
 
-        <!-- 캐러셀 광고 슬라이드 -->
-        <div class="carousel-wrapper d-flex justify-content-center">
-            <div class="carousel-container position-relative">
-                <button class="before-btn">◃</button>
-                <div class="slide-container">
-                    <div class="slide-box"><img src="img/carousel1.jpg" /></div>
-                    <div class="slide-box"><img src="img/carousel2.jpg" /></div>
-                    <div class="slide-box"><img src="img/carousel3.jpg" /></div>
-                    <div class="slide-box"><img src="img/carousel1.jpg" /></div>
-                </div>
-                <button class="next-btn">▹</button>
-            </div>
-        </div>
-
-        <!-- 입력창 -->
-        <div class="container text-center mt-4">
-            <h2 class="mb-3">주문을 입력해주세요</h2>
-            <div class="input-group mb-3">
-                <input type="text" id="textInput" class="form-control" placeholder="시원한 아메리카노 한잔 어떠세요?" />
-                <button class="btn btn-secondary" id="voiceBtn">🎤음성</button>
-            </div>
-            <button id="sendBtn" class="btn btn-primary btn-lg">🛒주문하기</button>
-            <button id="menuBtn" class="btn btn-primary btn-lg">📋메뉴 보기</button>
-
-            <div id="recommendationBox" class="container mt-4 d-none"></div>
-
-            <p id="responseText" class="mt-3">서버로부터 응답 대기중</p>
-        </div>
-
-        <!-- 인라인 장바구니 패널 (초기 비표시, 우상단 고정) -->
-        <div class="d-none" id="cart-panel">
-            <div class="card">
-                <div class="card-header d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0">🛒 장바구니</h5>
-                    <button type="button" class="btn btn-sm btn-outline-secondary" id="cart-panel-clear">전부 비우기</button>
-                </div>
-                <div class="card-body" id="cart-panel-items">
-                    <!-- 항목이 여기에 표시됩니다 -->
-                </div>
-                <div class="card-footer d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0" id="cart-panel-total">총액: \0</h5>
-                    <button class="btn btn-success" id="cart-panel-pay">💳결제하기</button>
-                </div>
-            </div>
-        </div>
         <!-- JavaScript 파일 연결 -->
         <script src="voice-recognition.js"></script>
         <script src="main.js"></script>

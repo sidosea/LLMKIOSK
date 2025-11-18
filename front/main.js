@@ -1,6 +1,9 @@
 //통합 자바 스크립트
 // 전역 장바구니 객체
 const cart = {};
+let highlightedItemKey = null;
+let menuCatalog = [];
+let detailOptions = { mild: false, extraShots: 0 };
 
 //배포 후 연결 || 로컬에서 테스트
 const API_BASE_URL = 'http://localhost:5002';
@@ -43,49 +46,55 @@ function openDetailModal(item) {
   currentDetailItem = item;
   currentQty = 1;
   currentTemp = "ice";
+  detailOptions = { mild: false, extraShots: 0 };
 
   $("#detailModalLabel").text(item.name);
   $("#detail-image").attr("src", "img/" + item.image).attr("alt", item.name);
-  $("#detail-description").text(item.description);
-  $("#detail-price").text(formatPrice(item.price));
-  $("#qty-input").val(1);
+  $("#detail-description").text(item.description || "");
+  $("#shots-value").text("0");
+  $("#option-mild").removeClass("active");
 
   const $options = $("#hot-ice-options").empty();
   const hotAvailable = item.hot === "Y";
 
   const hotBtn = $(`
-    <button type="button" class="btn btn-outline-primary temperature-btn"
-            data-temp="hot" ${hotAvailable ? "" : "disabled"}>
-      따뜻하게
+    <button type="button" class="pill-btn temperature-btn" data-temp="hot" ${hotAvailable ? "" : "disabled"}>
+      HOT
     </button>
   `);
 
   const iceBtn = $(`
-    <button type="button" class="btn btn-outline-primary temperature-btn active btn-danger"
-            data-temp="ice">
-      차갑게
+    <button type="button" class="pill-btn temperature-btn active" data-temp="ice">
+      ICE
     </button>
   `);
 
-  $options.append(iceBtn, hotBtn);
+  $options.append(hotBtn, iceBtn);
 
   $(".temperature-btn").off("click").on("click", function () {
     if ($(this).prop("disabled")) return;
-    $(".temperature-btn").removeClass("active btn-danger").addClass("btn-outline-primary");
-    $(this).addClass("active btn-danger").removeClass("btn-outline-primary");
+    $(".temperature-btn").removeClass("active");
+    $(this).addClass("active");
     currentTemp = $(this).data("temp");
   });
 
-  $("#qty-minus").off("click").on("click", function () {
-    if (currentQty > 1) {
-      currentQty--;
-      $("#qty-input").val(currentQty);
+  $("#option-mild").off("click").on("click", function () {
+    detailOptions.mild = !detailOptions.mild;
+    $(this).toggleClass("active", detailOptions.mild);
+  });
+
+  $("#shots-minus").off("click").on("click", function () {
+    if (detailOptions.extraShots > 0) {
+      detailOptions.extraShots--;
+      $("#shots-value").text(detailOptions.extraShots);
+      updateDetailPriceDisplay();
     }
   });
 
-  $("#qty-plus").off("click").on("click", function () {
-    currentQty++;
-    $("#qty-input").val(currentQty);
+  $("#shots-plus").off("click").on("click", function () {
+    detailOptions.extraShots++;
+    $("#shots-value").text(detailOptions.extraShots);
+    updateDetailPriceDisplay();
   });
 
   $("#add-to-cart-detail").off("click").on("click", function () {
@@ -94,25 +103,66 @@ function openDetailModal(item) {
       return;
     }
     addToCartDetail();
-    $("#detailModal").modal("hide");
   });
 
+  $("#detail-pay-now").off("click").on("click", function () {
+    if (!currentTemp) {
+      alert("온도를 선택하세요!");
+      return;
+    }
+    addToCartDetail({ skipToast: true });
+    proceedToPayment();
+  });
+
+  updateDetailPriceDisplay();
   new bootstrap.Modal($("#detailModal")[0]).show();
 }
 
-function addToCartDetail() {
-  const key = `${currentDetailItem.name} (${currentTemp === "hot" ? "따뜻하게" : "차갑게"})`;
+function updateDetailPriceDisplay() {
+  if (!currentDetailItem) return;
+  const adjusted = currentDetailItem.price + detailOptions.extraShots * 500;
+  $("#detail-price").text(formatPrice(adjusted));
+}
+
+function addToCartDetail({ skipToast = false, closeModal = true } = {}) {
+  if (!currentDetailItem) return null;
+  const tempLabel = currentTemp === "hot" ? "따뜻하게" : "차갑게";
+  const optionKey = `mild:${detailOptions.mild ? 1 : 0}|shots:${detailOptions.extraShots}`;
+  const key = `${currentDetailItem.name}|${currentTemp}|${optionKey}`;
+  const unitPrice = currentDetailItem.price + detailOptions.extraShots * 500;
+
   if (cart[key]) {
     cart[key].quantity += currentQty;
   } else {
     cart[key] = {
       ...currentDetailItem,
+      displayName: currentDetailItem.name,
+      displayLabel: `${currentDetailItem.name} (${tempLabel})`,
+      temperature: currentTemp,
+      temperatureLabel: tempLabel,
+      options: { mild: detailOptions.mild, extraShots: detailOptions.extraShots },
+      basePrice: currentDetailItem.price,
+      price: unitPrice,
       name: key,
       quantity: currentQty
     };
   }
   updateCart();
-  showToast(key);
+  if (!skipToast) {
+    showToast(currentDetailItem.name);
+  }
+  if (closeModal) {
+    $("#detailModal").modal("hide");
+  }
+  return key;
+}
+
+function createOptionSummary(item) {
+  if (!item || !item.options) return "";
+  const summary = [];
+  if (item.options.mild) summary.push("연하게");
+  if (item.options.extraShots) summary.push(`샷 +${item.options.extraShots}`);
+  return summary.join(" · ");
 }
 
 function updateCart() {
@@ -129,13 +179,16 @@ function updateCart() {
     total += itemTotal;
     count += item.quantity;
 
+    const optionSummary = createOptionSummary(item);
+    const optionHtml = optionSummary ? `<div class="text-muted small">${optionSummary}</div>` : "";
     const $itemDiv = $(`
       <div class="d-flex justify-content-between align-items-center mb-3">
         <div class="d-flex align-items-center">
           <img src="img/${item.image}" alt="${name}" class="cart-item-image me-2" style="width: 40px; height: 40px; object-fit: cover;">
           <div>
-            <div>${name}</div>
+            <div>${item.displayLabel || item.displayName || name}</div>
             <div class="text-muted small">${formatPrice(item.price)} x ${item.quantity}</div>
+            ${optionHtml}
           </div>
         </div>
         <div class="d-flex align-items-center">
@@ -152,41 +205,7 @@ function updateCart() {
   $cartTotal.text(total > 0 ? `총액: ${formatPrice(total)}` : "장바구니가 비었습니다");
   $cartCount.text(count);
 
-  // 인라인 패널도 갱신
-  const $panel = $("#cart-panel");
-  const $panelItems = $("#cart-panel-items");
-  const $panelTotal = $("#cart-panel-total");
-  if ($panel.length) {
-    $panelItems.empty();
-    if (count === 0) {
-      $panel.addClass("d-none");
-      $panelTotal.text("총액: \\0");
-    } else {
-      $panel.removeClass("d-none");
-      // 항목 렌더링
-      $.each(cart, function (name, item) {
-        const itemTotal = item.price * item.quantity;
-        const $row = $(`
-          <div class="d-flex justify-content-between align-items-center mb-2">
-            <div class="d-flex align-items-center">
-              <img src="img/${item.image}" alt="${name}" class="me-2" style="width: 36px; height: 36px; object-fit: cover;">
-              <div>
-                <div>${name}</div>
-                <div class="text-muted small">${formatPrice(item.price)} x ${item.quantity}</div>
-              </div>
-            </div>
-            <div class="d-flex align-items-center">
-              <button class="btn btn-sm btn-outline-secondary me-2 decrease-btn" data-name="${name}">-</button>
-              <button class="btn btn-sm btn-outline-secondary me-2 increase-btn" data-name="${name}">+</button>
-              <button class="btn btn-sm btn-danger remove-btn" data-name="${name}">삭제</button>
-            </div>
-          </div>
-        `);
-        $panelItems.append($row);
-      });
-      $panelTotal.text(`총액: ${formatPrice(total)}`);
-    }
-  }
+  updateOrderCardSummary(total, count);
 }
 
 function showToast(itemName) {
@@ -222,12 +241,98 @@ function removeFromCart(name) {
   updateCart();
 }
 
+function proceedToPayment() {
+  if (!Object.keys(cart).length) {
+    $("#responseText").text("장바구니가 비어 있습니다.");
+    return;
+  }
+  const cartData = encodeURIComponent(JSON.stringify(cart));
+  window.location.href = `paymentpage.html?cart=${cartData}`;
+}
+
+function getTemperatureLabel(item) {
+  if (!item) return "";
+  if (item.temperatureLabel) return item.temperatureLabel;
+  if (item.temperature === "hot") return "따뜻하게";
+  if (item.temperature === "ice") return "차갑게";
+  const match = item.name && item.name.match(/\(([^)]+)\)/);
+  return match ? match[1] : "기본";
+}
+
+function getOptionDetails(item) {
+  const details = [];
+  if (item?.options?.mild) details.push("연하게");
+  if (item?.options?.extraShots) details.push(`샷 +${item.options.extraShots}`);
+  return details.length ? ` · ${details.join(" · ")}` : "";
+}
+
+function toggleOrderCardControls(disabled) {
+  $("#order-card-minus, #order-card-plus, #order-card-cancel, #order-card-checkout").prop("disabled", disabled);
+}
+
+function setHighlightedItem(key) {
+  if (!cart[key]) return;
+  highlightedItemKey = key;
+  const item = cart[key];
+  const tempLabel = getTemperatureLabel(item);
+  $("#order-selected-name").text(item.displayName || item.name);
+  $("#order-selected-meta").text(`${tempLabel} x ${item.quantity}${getOptionDetails(item)}`);
+  $("#order-card-qty").text(item.quantity);
+  $("#order-card-items .order-item-row").removeClass("active").filter(function () {
+    return $(this).data("key") === key;
+  }).addClass("active");
+}
+
+function updateOrderCardSummary(total, count) {
+  const $list = $("#order-card-items");
+  if (!$list.length) return;
+  $list.empty();
+
+  if (count === 0) {
+    highlightedItemKey = null;
+    $list.append('<p class="order-item order-empty">담긴 메뉴가 없습니다</p>');
+    $("#order-selected-name").text("담긴 메뉴가 없습니다");
+    $("#order-selected-meta").text("메뉴를 담아주세요");
+    $("#order-card-qty").text("0");
+    $("#order-card-total").text("₩0");
+    toggleOrderCardControls(true);
+    return;
+  }
+
+  $("#order-card-total").text(formatPrice(total));
+  toggleOrderCardControls(false);
+
+  const keys = Object.keys(cart);
+  if (!highlightedItemKey || !cart[highlightedItemKey]) {
+    highlightedItemKey = keys[0];
+  }
+
+  keys.forEach((key) => {
+    const item = cart[key];
+    const tempLabel = getTemperatureLabel(item);
+    const optionDetails = getOptionDetails(item);
+    const $row = $(`
+      <div class="order-item-row${key === highlightedItemKey ? " active" : ""}">
+        <div>
+          <p class="order-item">${item.displayName || item.name}</p>
+          <p class="order-meta">${tempLabel} x ${item.quantity}${optionDetails}</p>
+        </div>
+        <p class="order-line-price">${formatPrice(item.price * item.quantity)}</p>
+      </div>
+    `).attr("data-key", key);
+    $list.append($row);
+  });
+
+  setHighlightedItem(highlightedItemKey);
+}
+
 function loadMenu() {
   fetch(`${API_BASE_URL}/api/v1/menus`)
     .then((res) => res.json())
     .then((response) => {
       if (response.data) {
-        renderMenu(response.data);
+        menuCatalog = response.data;
+        renderMenu(menuCatalog);
       } else {
         console.error("메뉴 데이터를 가져올 수 없습니다:", response.error);
       }
@@ -237,78 +342,94 @@ function loadMenu() {
     });
 }
 
-// 추천 응답 표시
-function displayRecommendations(recs) {
-  const $box = $("#recommendationBox");
-  $box.empty().removeClass("d-none");
-
-  // API에서 메뉴 정보 가져오기
-  fetch(`${API_BASE_URL}/api/v1/menus`)
+function ensureMenuCatalog() {
+  if (menuCatalog.length) {
+    return Promise.resolve(menuCatalog);
+  }
+  return fetch(`${API_BASE_URL}/api/v1/menus`)
     .then(res => res.json())
     .then(response => {
       if (!response.data) {
-        console.error("메뉴 데이터를 가져올 수 없습니다:", response.error);
-        return;
+        throw new Error("메뉴 데이터를 가져올 수 없습니다.");
       }
-      const menuItems = response.data;
-      const main = menuItems.find(item => item.name === recs[0].name);
-      if (!main) return; // 메뉴를 찾지 못한 경우
+      menuCatalog = response.data;
+      return menuCatalog;
+    });
+}
 
-      const mainHTML = `
-        <div class="text-center">
-            <h4>${main.name}</h4>
-            <img src="img/${main.image}" class="img-fluid rounded" style="max-width: 200px; cursor: pointer;" id="main-recommendation" />
-            <p class="mt-2">${main.description}</p>
-            <button class="btn btn-success mt-3" id="addToCartBtn">🛍 "${main.name}" 담기</button>
+function renderRecommendationCard(item) {
+  const description = item.description || "상세 설명을 준비 중입니다.";
+  return `
+    <article class="recommendation-card">
+      <img src="img/${item.image}" alt="${item.name}" />
+      <div class="card-body">
+        <p class="card-title">${item.name}</p>
+        <p class="card-desc">${description}</p>
+        <div class="card-footer">
+          <span class="card-price">${formatPrice(item.price)}</span>
+          <button type="button" class="card-action js-open-detail" data-menu="${item.name}">추가하기</button>
         </div>
-      `;
-      $box.append(mainHTML);
+      </div>
+    </article>
+  `;
+}
 
-      if (recs.length > 1) {
-        let otherHTML = `
-          <div class="mt-4">
-              <small>혹시 이것을 찾으셨나요?</small>
-              <div class="d-flex justify-content-center gap-3 mt-2">`;
+function renderCollabCard(item) {
+  const description = item.description || "풍성한 기쁨을 느껴보세요.";
+  const template = `
+    <div class="collab-thumb">
+      <img src="img/${item.image}" alt="${item.name}" />
+    </div>
+    <div class="card-content">
+      <p class="card-title">${item.name}</p>
+      <p class="card-desc">${description}</p>
+      <div class="card-footer">
+        <span class="card-price">${formatPrice(item.price)}</span>
+        <button type="button" class="card-action js-open-detail" data-menu="${item.name}">추가하기</button>
+      </div>
+    </div>
+  `;
+  $("#collab-card").html(template);
+}
 
-        recs.slice(1).forEach((rec) => {
-          const item = menuItems.find(menu => menu.name === rec.name);
-          if (item) {
-            otherHTML += `
-              <div class="text-center alt-item" style="cursor:pointer;">
-                  <img src="img/${item.image}" class="img-thumbnail" style="width:100px;" />
-                  <div>${item.name}</div>
-              </div>`;
-          }
-        });
+// 추천 응답 표시
+function displayRecommendations(recs, userInputText = "") {
+  const $shell = $("#recommendation-shell");
+  const $collabSection = $("#collab-section");
+  const $specialSection = $("#special-section");
+  const $list = $("#recommendation-list");
 
-        otherHTML += `</div></div>`;
-        $box.append(otherHTML);
+  ensureMenuCatalog()
+    .then((menuItems) => {
+      const resolved = recs
+        .map((rec) => {
+          const found = menuItems.find((item) => item.name === rec.name);
+          if (!found) return null;
+          return {
+            ...found,
+            description: found.description || rec.description || ""
+          };
+        })
+        .filter(Boolean);
+
+      if (!resolved.length) return;
+
+      $shell.removeClass("d-none");
+      if (userInputText) {
+        $("#collab-title").text(userInputText);
       }
+      renderCollabCard(resolved[0]);
+      $collabSection.removeClass("d-none");
 
-      // 메인 추천 메뉴 클릭 시 상세 모달 열기
-      $("#main-recommendation").on("click", function() {
-        openDetailModal(main);
+      const specials = resolved.slice(1, 4);
+      $list.empty();
+      specials.forEach((item) => {
+        $list.append(renderRecommendationCard(item));
       });
-
-      // 담기 버튼 클릭 시 상세 모달 열기
-      $("#addToCartBtn").on("click", function() {
-        openDetailModal(main);
-      });
-
-      $(".alt-item").on("click", function () {
-        const name = $(this).find("div").text();
-        const selected = menuItems.find(item => item.name === name);
-        if (selected) {
-          const newList = [selected, ...recs.filter(r => r.name !== name)];
-          displayRecommendations(newList);
-        }
-      });
-
-      // 추천 섹션으로 스무스 스크롤
-      const boxEl = $box.get(0);
-      if (boxEl) {
-        boxEl.scrollIntoView({ behavior: "smooth", block: "start" });
-      }
+      $specialSection.toggleClass("d-none", specials.length === 0);
+    })
+    .catch((error) => {
+      console.error(error);
     });
 }
 
@@ -333,15 +454,12 @@ function displayRecommendations(recs) {
         const match = data.match || {};
         const quantity = parseInt(intent.quantity || 1, 10) || 1;
         const temperature = intent.temperature === "hot" ? "hot" : "ice";
+        const temperatureLabel = temperature === "hot" ? "따뜻하게" : "차갑게";
 
         // 메뉴 목록에서 상세 정보 보강
-        fetch(`${API_BASE_URL}/api/v1/menus`)
-          .then(res => res.json())
-          .then(menuRes => {
-            let menuItem = null;
-            if (menuRes && menuRes.data) {
-              menuItem = menuRes.data.find(item => item.name === match.name);
-            }
+        ensureMenuCatalog()
+          .then(menuItems => {
+            const menuItem = menuItems.find(item => item.name === match.name);
             // 서버 응답을 기반으로 최소 필드 구성 (fallback)
             const resolvedItem = menuItem || {
               name: match.name,
@@ -350,13 +468,22 @@ function displayRecommendations(recs) {
               description: ""
             };
 
-            // 장바구니 담기
-            const key = `${resolvedItem.name} (${temperature === "hot" ? "따뜻하게" : "차갑게"})`;
+            const optionKey = "mild:0|shots:0";
+            const key = `${resolvedItem.name}|${temperature}|${optionKey}`;
+            const displayLabel = `${resolvedItem.name} (${temperatureLabel})`;
+
             if (cart[key]) {
               cart[key].quantity += quantity;
             } else {
               cart[key] = {
                 ...resolvedItem,
+                displayName: resolvedItem.name,
+                displayLabel,
+                temperature,
+                temperatureLabel,
+                options: { mild: false, extraShots: 0 },
+                basePrice: resolvedItem.price,
+                price: resolvedItem.price,
                 name: key,
                 quantity: quantity
               };
@@ -381,7 +508,7 @@ function displayRecommendations(recs) {
               success: function (recRes) {
                 const recData = recRes && recRes.data;
                 if (recData && Array.isArray(recData.recommendations) && recData.recommendations.length) {
-                  displayRecommendations(recData.recommendations);
+                  displayRecommendations(recData.recommendations, text);
                 }
               }
             });
@@ -401,6 +528,7 @@ function displayRecommendations(recs) {
 
 // 메인 실행
 $(document).ready(function () {
+  toggleOrderCardControls(true);
   // 페이지 이동
   $("#menuBtn").on("click", function () {
     window.location.href = "menupage.html";
@@ -475,19 +603,7 @@ $(document).ready(function () {
     });
   }
 
-  // 장바구니 기능
-  $("#cart-button").on("click", function () {
-    const panel = document.getElementById("cart-panel");
-    if (panel && !panel.classList.contains("d-none")) {
-      panel.scrollIntoView({ behavior: "smooth", block: "start" });
-    } else {
-      // 비어있으면 토스트만
-      $("#responseText").text("장바구니가 비어 있습니다.");
-    }
-  });
-
   $("#clear-cart").on("click", clearCart);
-  $("#cart-panel-clear").on("click", clearCart);
 
   $("#cart-items").on("click", ".decrease-btn", function () {
     decreaseQuantity($(this).data("name"));
@@ -498,22 +614,39 @@ $(document).ready(function () {
   $("#cart-items").on("click", ".remove-btn", function () {
     removeFromCart($(this).data("name"));
   });
-  $("#cart-panel-items").on("click", ".decrease-btn", function () {
-    decreaseQuantity($(this).data("name"));
+
+  $("#order-card-minus").on("click", function () {
+    if (highlightedItemKey) {
+      decreaseQuantity(highlightedItemKey);
+    }
   });
-  $("#cart-panel-items").on("click", ".increase-btn", function () {
-    increaseQuantity($(this).data("name"));
+  $("#order-card-plus").on("click", function () {
+    if (highlightedItemKey) {
+      increaseQuantity(highlightedItemKey);
+    }
   });
-  $("#cart-panel-items").on("click", ".remove-btn", function () {
-    removeFromCart($(this).data("name"));
+  $("#order-card-items").on("click", ".order-item-row", function () {
+    const key = $(this).data("key");
+    if (cart[key]) {
+      setHighlightedItem(key);
+    }
   });
+  $("#order-card-cancel").on("click", clearCart);
 
   // 💳 결제하기 버튼
-  $(".btn-success").on("click", function () {
-    if ($(this).attr("id") === "addToCartBtn" || $(this).attr("id") === "add-to-cart-detail") return;
-    // 장바구니 정보를 JSON으로 직렬화
-    const cartData = encodeURIComponent(JSON.stringify(cart));
-    window.location.href = `paymentpage.html?cart=${cartData}`;
+  $("#payment-btn, #order-card-checkout").on("click", function (e) {
+    e.preventDefault();
+    proceedToPayment();
+  });
+
+  $(document).on("click", ".js-open-detail", function () {
+    const name = $(this).data("menu");
+    ensureMenuCatalog().then((menuItems) => {
+      const found = menuItems.find((menu) => menu.name === name);
+      if (found) {
+        openDetailModal(found);
+      }
+    });
   });
 
   // 메뉴 불러오기
