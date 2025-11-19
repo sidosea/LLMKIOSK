@@ -525,6 +525,7 @@ function displayRecommendations(recs, userInputText = "") {
       }
     });
   }
+  window.sendText = sendText;
 
 // 메인 실행
 $(document).ready(function () {
@@ -592,9 +593,8 @@ $(document).ready(function () {
     });
   }
 
-  // 텍스트 전송
-  if ($("#sendBtn").length) {
-    $("#sendBtn").on("click", sendText);
+  // 입력창 엔터로 전송
+  if ($("#textInput").length) {
     $("#textInput").on("keypress", function (e) {
       if (e.which === 13) {
         e.preventDefault();

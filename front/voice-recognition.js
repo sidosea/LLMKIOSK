@@ -3,7 +3,9 @@ class VoiceRecognition {
     constructor() {
         this.recognition = null;
         this.isListening = false;
+        this.defaultDesc = '버튼을 누르고 메뉴를 주문해주세요!';
         this.init();
+        this.updateButton('🎤', false);
     }
 
     init() {
@@ -28,7 +30,7 @@ class VoiceRecognition {
         this.recognition.onstart = () => {
             console.log('음성 인식 시작');
             this.isListening = true;
-            this.updateButton('듣고 있습니다...', 'btn-warning');
+            this.updateButton('듣는 중', true);
         };
 
         this.recognition.onresult = (event) => {
@@ -63,13 +65,13 @@ class VoiceRecognition {
         this.recognition.onerror = (event) => {
             console.error('음성 인식 오류:', event.error);
             this.showError('음성 인식을 다시 시도해주세요.');
-            this.updateButton('🎤음성', 'btn-secondary');
+            this.updateButton('🎤', false);
         };
 
         this.recognition.onend = () => {
             console.log('음성 인식 종료');
             this.isListening = false;
-            this.updateButton('🎤음성', 'btn-secondary');
+            this.updateButton('🎤', false);
         };
     }
 
@@ -111,12 +113,22 @@ class VoiceRecognition {
         this.showSuccess(`"${transcript}" 인식되었습니다.`);
     }
 
-    updateButton(text, className) {
+    updateButton(titleText, isListening = false) {
         const button = document.getElementById('voiceBtn');
-        if (button) {
-            button.textContent = text;
-            button.className = `btn ${className}`;
+        if (!button) return;
+
+        const titleEl = button.querySelector('.action-title');
+        const descEl = button.querySelector('.action-desc');
+
+        if (titleEl && titleText) {
+            titleEl.textContent = titleText;
         }
+
+        if (descEl) {
+            descEl.textContent = isListening ? '듣고 있습니다...' : this.defaultDesc;
+        }
+
+        button.classList.toggle('is-listening', isListening);
     }
 
     showError(message) {

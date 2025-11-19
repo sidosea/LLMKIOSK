@@ -121,24 +121,6 @@ body {
     width: 120px;
 }
 
-/* 주문 / 메뉴 버튼 */
-#sendBtn, #menuBtn {
-    background: linear-gradient(145deg, #d2b48c, #c19a6b);
-    color: #fff;
-    border: none;
-    padding: 15px 40px;
-    margin: 20px 10px;
-    font-size: 1.2rem;
-    font-weight: bold;
-    border-radius: 18px;
-    box-shadow: 0 6px 10px rgba(210,180,140,0.5);
-    transition: all 0.3s ease;
-}
-#sendBtn:hover, #menuBtn:hover {
-    background: linear-gradient(145deg, #c19a6b, #a67b5b);
-    transform: translateY(-3px);
-}
-
 /* 추천 박스 */
 #recommendationBox {
     background-color: #fff8f0;

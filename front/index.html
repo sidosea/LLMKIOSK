@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>##카페</title>
+        <title>카페메인페이지</title>
         <link
             rel="stylesheet"
             href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" />
@@ -44,20 +44,21 @@
                             class="prompt-input"
                             placeholder="시원한 아메리카노 한잔 어떠세요?"
                             aria-label="주문을 입력해주세요" />
-                        <button type="button" class="mic-btn" id="voiceBtn" aria-label="음성으로 주문하기">
-                            🎤
-                        </button>
                     </div>
                 </section>
 
                 <section class="action-grid">
-                    <button type="button" id="sendBtn" class="action-card action-card-dark">
-                        <p class="action-title">주문하기</p>
-                        <p class="action-desc">담으신 메뉴를 바로 주문하세요</p>
+                    <button
+                        type="button"
+                        id="voiceBtn"
+                        class="action-card action-card-dark action-card-voice"
+                        aria-label="음성으로 주문하기">
+                        <span class="action-title">🎤</span>
+                        <span class="action-desc">버튼을 누르고 메뉴를 주문해주세요!</span>
                     </button>
                     <button type="button" id="menuBtn" class="action-card action-card-dark">
-                        <p class="action-title">메뉴보기</p>
-                        <p class="action-desc">스타벅스의 특별한 메뉴를 살펴보세요</p>
+                        <span class="action-title">메뉴보기</span>
+                        <span class="action-desc">스타벅스의 특별한 메뉴를 살펴보세요</span>
                     </button>
                 </section>
 
@@ -111,7 +112,7 @@
 
                     <section class="special-section" id="special-section">
                         <p class="special-title">
-                            특별한 추천 메뉴<span class="text-muted">를 안내드릴게요</span>
+                            이걸 찾으셨나요? <span class="text-muted">추천 메뉴를 안내드릴게요</span>
                         </p>
                         <div id="recommendation-list" class="recommendation-list"></div>
                     </section>
@@ -120,23 +121,6 @@
             </main>
         </div>
 
-        <!-- 장바구니 모달 -->
-        <div class="modal fade" id="cartModal" tabindex="-1" aria-labelledby="cartModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-scrollable">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="cartModalLabel">🛒 장바구니</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body" id="cart-items"></div>
-                    <div class="modal-footer">
-                        <h5 class="me-auto" id="cart-total">총액: \0</h5>
-                        <button type="button" class="btn btn-secondary" id="clear-cart">전부 비우기</button>
-                        <button type="button" class="btn btn-success" id="payment-btn">💳결제하기</button>
-                    </div>
-                </div>
-            </div>
-        </div>
 
         <!-- 메뉴 상세 모달 -->
         <div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="detailModalLabel" aria-hidden="true">
