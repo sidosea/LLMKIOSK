@@ -427,6 +427,14 @@ function displayRecommendations(recs, userInputText = "") {
         $list.append(renderRecommendationCard(item));
       });
       $specialSection.toggleClass("d-none", specials.length === 0);
+
+      // 주문 카드를 플로팅으로 변경
+      $(".order-card").addClass("floating");
+
+      // 자동 스크롤 다운 (추천 섹션으로)
+      setTimeout(() => {
+        $shell[0].scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 100);
     })
     .catch((error) => {
       console.error(error);
