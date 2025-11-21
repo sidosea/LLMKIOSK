@@ -96,14 +96,14 @@ function openDetailModal(item) {
   if (isMenuPage) {
     // Figma 스타일 (pill 버튼)
     hotBtn = $(`
-      <button type="button" class="pill-btn temperature-btn"
+      <button type="button" class="pill-btn temperature-btn temperature-hot"
               data-temp="hot" ${hotAvailable ? "" : "disabled"}>
         HOT
       </button>
     `);
 
     iceBtn = $(`
-      <button type="button" class="pill-btn temperature-btn active"
+      <button type="button" class="pill-btn temperature-btn temperature-ice active"
               data-temp="ice">
         ICE
       </button>
@@ -358,6 +358,13 @@ $cartItems.on("click", ".remove-btn", function () {
 
 // 💳 결제하기 버튼
 $(".btn-success, #order-card-checkout").on("click", function () {
+  // 장바구니가 비어있는지 확인
+  const cartKeys = Object.keys(cart);
+  if (cartKeys.length === 0) {
+    alert("메뉴를 담아주세요.");
+    return;
+  }
+
   // 장바구니 정보를 JSON으로 직렬화
   const cartData = encodeURIComponent(JSON.stringify(cart));
   window.location.href = `paymentpage.html?cart=${cartData}`;

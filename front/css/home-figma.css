@@ -634,6 +634,29 @@ button {
     color: #fbfbfb;
 }
 
+/* 온도 버튼 색상 */
+.temperature-hot {
+    border-color: #ff6b6b;
+    color: #ff6b6b;
+}
+
+.temperature-hot.active {
+    background: #ff6b6b;
+    border-color: #ff6b6b;
+    color: #fff;
+}
+
+.temperature-ice {
+    border-color: #4dabf7;
+    color: #4dabf7;
+}
+
+.temperature-ice.active {
+    background: #4dabf7;
+    border-color: #4dabf7;
+    color: #fff;
+}
+
 .option-pill.active {
     border-color: #003628;
     background: #003628;

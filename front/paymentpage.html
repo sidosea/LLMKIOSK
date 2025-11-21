@@ -2,80 +2,67 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>결제하기</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="css/Detail.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <link rel="stylesheet" href="css/home-figma.css">
+  <link rel="stylesheet" href="css/paymentpage.css">
 </head>
-<body>
-
-<!-- 상단바 -->
-<nav class="navbar navbar-light bg-light">
-  <div class="container">
-    <a class="navbar-brand" href="#">💳 결제하기</a>
-  </div>
-</nav>
-
-<!-- 결제 본문 -->
-<div class="container py-5">
-  <h2 class="mb-4">주문 내역</h2>
-
-  <ul class="list-group mb-4" id="order-summary">
-    <!-- JS로 장바구니 목록 출력 -->
-  </ul>
-
-  <h4 class="text-end my-4" id="total-price">총액: ₩0</h4>
-
-  <div class="d-grid gap-3">
-    <button class="btn btn-primary btn-lg" id="card-payment">💳 일반 카드 결제</button>
-    <button class="btn btn-success btn-lg" id="easy-payment">📱 네이버페이 / 카카오페이</button>
-    <button class="btn btn-warning btn-lg" id="cash-payment">💵 현금 결제</button>
-  </div>
-</div>
-
-<!-- 부트스트랩 및 스크립트 로드 -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-<!-- 장바구니 데이터를 읽고 화면에 출력하는 스크립트 -->
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-    // URL에서 cart 파라미터 가져오기
-    const urlParams = new URLSearchParams(window.location.search);
-    const cartParam = urlParams.get('cart');
-
-    if (!cartParam) {
-      document.getElementById('order-summary').innerHTML = '<li class="list-group-item">장바구니가 비어 있습니다.</li>';
-      return;
-    }
-
-    // cart 데이터 디코딩 및 파싱
-    const cart = JSON.parse(decodeURIComponent(cartParam));
-
-    const orderSummary = document.getElementById('order-summary');
-    let totalPrice = 0;
-
-    // 장바구니 항목을 리스트로 추가
-    for (const [name, item] of Object.entries(cart)) {
-      const itemTotal = item.price * item.quantity;
-      totalPrice += itemTotal;
-
-      const listItem = document.createElement('li');
-      listItem.className = 'list-group-item d-flex justify-content-between align-items-center';
-      listItem.innerHTML = `
-        <div>
-          <strong>${name}</strong> (${item.quantity}개)
+<body class="figma-body">
+  <div class="figma-bg">
+    <main class="kiosk-shell payment-shell" role="main">
+      <!-- 헤더 -->
+      <header class="payment-header">
+        <button type="button" class="back-btn" id="back-btn" onclick="window.location.href='menupage.html'">
+          뒤로가기
+        </button>
+        <div class="payment-logo">
+          <img src="https://www.figma.com/api/mcp/asset/ed1170f9-3059-4a51-b1d7-b631a17b3e12" alt="스타벅스 로고" />
         </div>
-        <div>₩${itemTotal.toLocaleString()}</div>
-      `;
-      orderSummary.appendChild(listItem);
-    }
+      </header>
 
-    // 총액 업데이트
-    document.getElementById('total-price').textContent = `총액: ₩${totalPrice.toLocaleString()}`;
-  });
-</script>
+      <!-- 제목 -->
+      <section class="payment-title-section">
+        <h1 class="payment-title">결제하기</h1>
+      </section>
 
-<script src="payment_script.js"></script>
+      <!-- 주문 확인 섹션 -->
+      <section class="payment-order-section">
+        <h2 class="section-title">주문을 확인해주세요</h2>
+        <div class="order-list-container">
+          <div class="order-list" id="order-list">
+            <!-- 주문 항목들이 여기에 동적으로 추가됩니다 -->
+          </div>
+          <div class="order-total-row">
+            <div class="order-total-label"></div>
+            <p class="order-total-amount" id="total-price">₩0</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 결제 수단 섹션 -->
+      <section class="payment-method-section">
+        <h2 class="section-title">결제수단을 선택해주세요</h2>
+        <div class="payment-methods">
+          <button type="button" class="payment-method-btn payment-method-card" id="card-payment">
+            <span class="payment-method-text">일반 카드 결제</span>
+          </button>
+          <div class="payment-method-row">
+            <button type="button" class="payment-method-btn payment-method-naver" id="naver-payment">
+              <span class="payment-method-text">네이버페이</span>
+            </button>
+            <button type="button" class="payment-method-btn payment-method-kakao" id="kakao-payment">
+              <span class="payment-method-text">카카오페이</span>
+            </button>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="payment_script.js"></script>
 </body>
 </html>

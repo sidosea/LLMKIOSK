@@ -58,13 +58,13 @@ function openDetailModal(item) {
   const hotAvailable = item.hot === "Y";
 
   const hotBtn = $(`
-    <button type="button" class="pill-btn temperature-btn" data-temp="hot" ${hotAvailable ? "" : "disabled"}>
+    <button type="button" class="pill-btn temperature-btn temperature-hot" data-temp="hot" ${hotAvailable ? "" : "disabled"}>
       HOT
     </button>
   `);
 
   const iceBtn = $(`
-    <button type="button" class="pill-btn temperature-btn active" data-temp="ice">
+    <button type="button" class="pill-btn temperature-btn temperature-ice active" data-temp="ice">
       ICE
     </button>
   `);

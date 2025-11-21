@@ -1,23 +1,46 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ko">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>주문 완료</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="css/Detail.css" />
-  </head>
-  <body class="bg-light text-center d-flex flex-column justify-content-center align-items-center" style="height: 100vh">
-    <h1 class="mb-4">✅ 주문이 완료되었습니다!</h1>
-    <p class="mb-5 fs-4">주문 번호: <span id="order-number" class="fw-bold"></span></p>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>주문 완료</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <link rel="stylesheet" href="css/home-figma.css">
+  <link rel="stylesheet" href="css/orderdonepage.css">
+</head>
+<body class="figma-body">
+  <div class="figma-bg">
+    <main class="kiosk-shell orderdone-shell" role="main">
+      <!-- 헤더 -->
+      <header class="orderdone-header">
+        <button type="button" class="back-btn" id="back-btn" onclick="window.location.href='paymentpage.html'">
+          뒤로가기
+        </button>
+        <div class="orderdone-logo">
+          <img src="https://www.figma.com/api/mcp/asset/458fa1d2-3d28-4d18-992e-9366c59dfa34" alt="스타벅스 로고" />
+        </div>
+      </header>
 
-    <a href="index.html" class="btn btn-primary btn-lg mb-3" id="order-done">처음으로 돌아가기</a>
+      <!-- 제목 -->
+      <section class="orderdone-title-section">
+        <h1 class="orderdone-title">결제하기</h1>
+      </section>
 
-    <p class="text-muted">5초 후 자동으로 메인 화면으로 이동합니다.</p>
+      <!-- 주문 완료 모달 -->
+      <div class="orderdone-overlay">
+        <div class="orderdone-modal">
+          <h2 class="orderdone-modal-title">주문이 완료되었습니다!</h2>
+          <p class="orderdone-number" id="order-number">36</p>
+          <button type="button" class="orderdone-btn" id="order-done">처음으로 돌아가기</button>
+          <p class="orderdone-message">5초 후 자동으로 메인 화면으로 이동합니다.</p>
+        </div>
+      </div>
+    </main>
+  </div>
 
-    <footer class="mt-auto text-muted small">감사합니다. 좋은 하루 보내세요 ☕️</footer>
-
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
-    <script src="order_done.js"></script>
-  </body>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="order_done.js"></script>
+</body>
 </html>
