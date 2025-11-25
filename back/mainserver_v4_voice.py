@@ -133,7 +133,9 @@ except Exception as e:
     exit(1)
 
 # Flask 설정
-app = Flask(__name__)
+# 프론트엔드 정적 파일 서빙을 위한 설정
+frontend_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'front')
+app = Flask(__name__, static_folder=frontend_path, static_url_path='')
 CORS(app)
 
 # 리소스 기반 경로 변경
@@ -307,5 +309,34 @@ def create_order_from_text():
 # Blueprint 등록
 app.register_blueprint(api_v1)
 
+# 프론트엔드 메인 페이지 라우트
+@app.route('/')
+def index():
+    """프론트엔드 메인 페이지를 서빙합니다."""
+    return app.send_static_file('index.html')
+
+@app.route('/<path:path>')
+def serve_static(path):
+    """프론트엔드 정적 파일을 서빙합니다."""
+    try:
+        return app.send_static_file(path)
+    except Exception:
+        # 파일이 없으면 404
+        return "File not found", 404
+
 if __name__ == '__main__':
+    print("\n" + "="*60)
+    print("🚀 서버가 시작되었습니다!")
+    print("="*60)
+    print(f"💻 로컬 접속:")
+    print(f"   http://localhost:5002")
+    print(f"\n📡 API 엔드포인트:")
+    print(f"   http://localhost:5002/api/v1/menus")
+    print(f"   http://localhost:5002/api/v1/recommendations")
+    print(f"\n🌐 ngrok 사용 시:")
+    print(f"   1. 새 터미널에서 실행: ngrok http 5002")
+    print(f"   2. ngrok에서 제공하는 URL로 접속")
+    print(f"   3. 프론트엔드가 자동으로 ngrok URL을 API 서버로 사용합니다")
+    print("="*60 + "\n")
+    
     app.run(host="0.0.0.0", port=5002, debug=True)

@@ -6,7 +6,40 @@ let menuCatalog = [];
 let detailOptions = { mild: false, extraShots: 0 };
 
 //배포 후 연결 || 로컬에서 테스트
-const API_BASE_URL = 'http://localhost:5002';
+// ngrok 사용 시 자동으로 현재 도메인 사용, 그 외에는 URL 파라미터 또는 localStorage 사용
+function getApiBaseUrl() {
+  // 1. URL 파라미터 확인 (예: ?server=https://abc123.ngrok.io)
+  const urlParams = new URLSearchParams(window.location.search);
+  const serverParam = urlParams.get('server');
+  if (serverParam) {
+    const apiUrl = serverParam.startsWith('http') ? serverParam : `http://${serverParam}`;
+    localStorage.setItem('api_base_url', apiUrl);
+    return apiUrl;
+  }
+  
+  // 2. localStorage 확인
+  const savedUrl = localStorage.getItem('api_base_url');
+  if (savedUrl) {
+    return savedUrl;
+  }
+  
+  // 3. ngrok 사용 시 자동 감지 (현재 도메인이 localhost가 아닌 경우)
+  const currentHost = window.location.hostname;
+  if (currentHost !== 'localhost' && currentHost !== '127.0.0.1') {
+    // ngrok이나 다른 도메인을 사용 중이면 현재 도메인 사용
+    const protocol = window.location.protocol;
+    const port = window.location.port ? `:${window.location.port}` : '';
+    const apiUrl = `${protocol}//${currentHost}${port}`;
+    console.log('🌐 ngrok/외부 도메인 감지, API URL:', apiUrl);
+    return apiUrl;
+  }
+  
+  // 4. 기본값 (로컬호스트)
+  return 'http://localhost:5002';
+}
+
+const API_BASE_URL = getApiBaseUrl();
+console.log('🌐 API 서버 주소:', API_BASE_URL);
 // const API_BASE_URL = 'https://kiosk-server-env.eba-as7cmwjg.ap-northeast-2.elasticbeanstalk.com';
 
 // 가격 포맷
