@@ -329,6 +329,9 @@ function updateOrderCardSummary(total, count) {
     $("#order-card-qty").text("0");
     $("#order-card-total").text("₩0");
     toggleOrderCardControls(true);
+    // 플로팅 상태 해제
+    $(".order-card").removeClass("floating");
+    $("#recommendation-shell").removeClass("has-floating-cart");
     return;
   }
 
@@ -463,6 +466,8 @@ function displayRecommendations(recs, userInputText = "") {
 
       // 주문 카드를 플로팅으로 변경
       $(".order-card").addClass("floating");
+      // 추천 섹션에 플로팅 장바구니를 위한 여백 추가
+      $shell.addClass("has-floating-cart");
 
       // 자동 스크롤 다운 (추천 섹션으로)
       setTimeout(() => {

@@ -385,6 +385,14 @@ button {
     display: flex;
     flex-direction: column;
     gap: 48px;
+    /* 플로팅 장바구니가 있을 때 충분한 스크롤 공간 확보 */
+    padding-bottom: 0;
+    transition: padding-bottom 0.3s ease;
+}
+
+/* 플로팅 장바구니가 있을 때 추천 섹션에 여백 추가 */
+.recommendation-shell.has-floating-cart {
+    padding-bottom: 450px;
 }
 
 .collab-section,
@@ -749,6 +757,11 @@ button {
         transform-origin: bottom center;
         max-width: none;
     }
+
+    /* 모바일에서 플로팅 장바구니를 위한 여백 조정 */
+    .recommendation-shell.has-floating-cart {
+        padding-bottom: 380px;
+    }
 }
 
 @media (max-width: 480px) {
@@ -759,6 +772,11 @@ button {
         transform: translateX(-50%) scale(0.75);
         transform-origin: bottom center;
         width: calc(100% - 16px);
+    }
+
+    /* 작은 화면에서 플로팅 장바구니를 위한 여백 조정 */
+    .recommendation-shell.has-floating-cart {
+        padding-bottom: 350px;
     }
 }
 
