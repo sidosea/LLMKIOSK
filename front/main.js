@@ -486,73 +486,100 @@ function displayRecommendations(recs, userInputText = "") {
       data: JSON.stringify({ text }),
       success: function (response) {
         const data = response && response.data;
-        if (!data || !data.match) {
+
+        // 새로운 형식: data.orders 배열 확인
+        if (!data || !data.orders || !Array.isArray(data.orders) || data.orders.length === 0) {
           $("#responseText").text("응답 형식이 올바르지 않습니다.");
           return;
         }
 
-        const intent = data.intent || {};
-        const match = data.match || {};
-        const quantity = parseInt(intent.quantity || 1, 10) || 1;
-        const temperature = intent.temperature === "hot" ? "hot" : "ice";
-        const temperatureLabel = temperature === "hot" ? "따뜻하게" : "차갑게";
+        // 경고 메시지가 있으면 표시
+        if (response.warnings) {
+          console.warn("일부 주문 실패:", response.warnings);
+        }
 
-        // 메뉴 목록에서 상세 정보 보강
+        // 여러 주문 처리
+        let successCount = 0;
+        let addedItems = [];
+
+        // 메뉴 목록 먼저 로드
         ensureMenuCatalog()
           .then(menuItems => {
-            const menuItem = menuItems.find(item => item.name === match.name);
-            // 서버 응답을 기반으로 최소 필드 구성 (fallback)
-            const resolvedItem = menuItem || {
-              name: match.name,
-              image: match.image || "placeholder.png",
-              price: match.unitPrice || 0,
-              description: ""
-            };
+            // 각 주문에 대해 장바구니에 추가
+            data.orders.forEach(order => {
+              const intent = order.intent || {};
+              const match = order.match || {};
+              const quantity = parseInt(intent.quantity || 1, 10) || 1;
+              const temperature = intent.temperature === "hot" ? "hot" : "ice";
+              const temperatureLabel = temperature === "hot" ? "따뜻하게" : "차갑게";
 
-            const optionKey = "mild:0|shots:0";
-            const key = `${resolvedItem.name}|${temperature}|${optionKey}`;
-            const displayLabel = `${resolvedItem.name} (${temperatureLabel})`;
-
-            if (cart[key]) {
-              cart[key].quantity += quantity;
-            } else {
-              cart[key] = {
-                ...resolvedItem,
-                displayName: resolvedItem.name,
-                displayLabel,
-                temperature,
-                temperatureLabel,
-                options: { mild: false, extraShots: 0 },
-                basePrice: resolvedItem.price,
-                price: resolvedItem.price,
-                name: key,
-                quantity: quantity
+              const menuItem = menuItems.find(item => item.name === match.name);
+              const resolvedItem = menuItem || {
+                name: match.name,
+                image: match.image || "placeholder.png",
+                price: match.unitPrice || 0,
+                description: ""
               };
-            }
-            updateCart();
-            showToast(resolvedItem.name);
 
-            $("#responseText").text(`🛒 "${match.name}"를 장바구니에 담았습니다.`);
+              const optionKey = "mild:0|shots:0";
+              const key = `${resolvedItem.name}|${temperature}|${optionKey}`;
+              const displayLabel = `${resolvedItem.name} (${temperatureLabel})`;
+
+              if (cart[key]) {
+                cart[key].quantity += quantity;
+              } else {
+                cart[key] = {
+                  ...resolvedItem,
+                  displayName: resolvedItem.name,
+                  displayLabel,
+                  temperature,
+                  temperatureLabel,
+                  options: { mild: false, extraShots: 0 },
+                  basePrice: resolvedItem.price,
+                  price: resolvedItem.price,
+                  name: key,
+                  quantity: quantity
+                };
+              }
+
+              successCount++;
+              addedItems.push(`${resolvedItem.name} ${quantity}개`);
+            });
+
+            updateCart();
+
+            // 성공 메시지 표시
+            if (successCount === 1) {
+              showToast(addedItems[0].split(' ')[0]);
+              $("#responseText").text(`🛒 "${addedItems[0]}"를 장바구니에 담았습니다.`);
+            } else {
+              showToast(`${successCount}개 주문 추가됨`);
+              $("#responseText").text(`🛒 ${successCount}개 주문을 장바구니에 담았습니다: ${addedItems.join(', ')}`);
+            }
+
             $("#textInput").val("");
 
-            // 추천 박스 표시: 가장 가까운 결과 + 2개 후보
-            const recPayload = {
-              query: intent.query || match.name,
-              temperature: intent.temperature || null,
-              quantity: intent.quantity || 1
-            };
-            $.ajax({
-              url: `${API_BASE_URL}/api/v1/recommendations`,
-              type: "POST",
-              contentType: "application/json",
-              data: JSON.stringify(recPayload),
-              success: function (recRes) {
-                const recData = recRes && recRes.data;
-                if (recData && Array.isArray(recData.recommendations) && recData.recommendations.length) {
-                  displayRecommendations(recData.recommendations, text);
+            // 추천 박스 표시: 첫 번째 주문 기준으로 추천
+            if (data.orders.length > 0) {
+              const firstOrder = data.orders[0];
+              const recPayload = {
+                query: firstOrder.intent?.query || firstOrder.match?.name || text,
+                temperature: firstOrder.intent?.temperature || null,
+                quantity: firstOrder.intent?.quantity || 1
+              };
+              $.ajax({
+                url: `${API_BASE_URL}/api/v1/recommendations`,
+                type: "POST",
+                contentType: "application/json",
+                data: JSON.stringify(recPayload),
+                success: function (recRes) {
+                  const recData = recRes && recRes.data;
+                  if (recData && Array.isArray(recData.recommendations) && recData.recommendations.length) {
+                    displayRecommendations(recData.recommendations, text);
+                  }
                 }
-              }
-            });
+              });
+            }
           })
           .catch(() => {
             $("#responseText").text("메뉴 정보를 가져오지 못했습니다.");

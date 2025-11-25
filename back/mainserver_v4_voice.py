@@ -70,6 +70,52 @@ def extract_user_intent(user_input):
             "quantity": 1
         }
 
+# 여러 주문 추출 (GPT 사용)
+def extract_multiple_orders(user_input):
+    """사용자 입력에서 여러 개의 주문을 추출합니다."""
+    system_prompt = """
+너는 카페 주문 분석기야. 사용자의 문장에서 여러 개의 주문을 찾아서 각각의 메뉴 이름(query), 온도(temperature), 수량(quantity)을 추출해줘.
+
+예시:
+- "아아 두잔 콜라보 한잔" → [{"query": "아아", "temperature": "ice", "quantity": 2}, {"query": "콜라보", "temperature": null, "quantity": 1}]
+- "아메리카노 3개 라떼 하나" → [{"query": "아메리카노", "temperature": null, "quantity": 3}, {"query": "라떼", "temperature": null, "quantity": 1}]
+
+결과는 반드시 아래 JSON 형식으로 줘 (배열):
+[
+  {
+    "query": "메뉴 핵심 단어",
+    "temperature": "hot | ice | null",
+    "quantity": 정수 (기본 1)
+  }
+]
+
+주문이 하나만 있어도 배열로 반환해줘.
+"""
+    try:
+        response = client.chat.completions.create(
+            model="gpt-4",
+            messages=[
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": user_input}
+            ],
+            temperature=0.2
+        )
+        content = response.choices[0].message.content
+        parsed = json.loads(content)
+        # 배열이 아닌 경우 배열로 변환
+        if not isinstance(parsed, list):
+            parsed = [parsed]
+        return parsed
+    except Exception as e:
+        app_logger = logging.getLogger("recommendations")
+        app_logger.exception(f"❌ GPT 호출 실패 (여러 주문 추출): {e}")
+        # 실패 시 기본값: 하나의 주문으로 처리
+        return [{
+            "query": user_input,
+            "temperature": None,
+            "quantity": 1
+        }]
+
 # DB 연결 테스트 함수
 def test_db_connection():
     """DB 연결을 테스트합니다."""
@@ -186,7 +232,7 @@ def _find_best_menu_match(query_text):
     return best_item, float(best_score)
 
 def _parse_order_from_text(text):
-    """자연어에서 의도와 수량을 추출합니다."""
+    """자연어에서 의도와 수량을 추출합니다. (단일 주문용)"""
     intent = extract_user_intent(text)
     query = intent.get("query") or text
     quantity = intent.get("quantity") or 1
@@ -198,6 +244,27 @@ def _parse_order_from_text(text):
         quantity = 1
     temperature = intent.get("temperature")
     return {"query": query, "quantity": quantity, "temperature": temperature}
+
+def _parse_orders_from_text(text):
+    """자연어에서 여러 개의 주문을 추출합니다."""
+    orders = extract_multiple_orders(text)
+    parsed_orders = []
+    for order in orders:
+        query = order.get("query") or text
+        quantity = order.get("quantity") or 1
+        try:
+            quantity = int(quantity)
+        except Exception:
+            quantity = 1
+        if quantity <= 0:
+            quantity = 1
+        temperature = order.get("temperature")
+        parsed_orders.append({
+            "query": query,
+            "quantity": quantity,
+            "temperature": temperature
+        })
+    return parsed_orders
 
 @api_v1.get("/menus")
 def get_menus():
@@ -274,26 +341,43 @@ def post_recommendations():
 
 @api_v1.post("/orders/text")
 def create_order_from_text():
-    """자연어 입력(예: '아아 2잔 줘')으로 주문을 생성하고 결제 진입 정보를 반환합니다."""
+    """자연어 입력(예: '아아 2잔 콜라보 한잔')으로 여러 주문을 생성하고 결제 진입 정보를 반환합니다."""
     body = request.get_json(silent=True) or {}
     text = body.get("text")
     if not text:
         return jsonify({"error": {"code": "VALIDATION_ERROR", "message": "text is required"}}), 400
 
-    # 의도/수량 파싱
-    parsed = _parse_order_from_text(text)
-    query = parsed["query"]
-    quantity = parsed["quantity"]
-    temperature = parsed["temperature"]
+    # 여러 주문 파싱
+    parsed_orders = _parse_orders_from_text(text)
 
-    # 메뉴 매칭
-    matched_menu, score = _find_best_menu_match(query)
-    if not matched_menu:
-        return jsonify({"error": {"code": "MENU_NOT_FOUND", "message": "해당하는 메뉴를 찾지 못했습니다."}}), 404
+    if not parsed_orders:
+        return jsonify({"error": {"code": "NO_ORDERS_FOUND", "message": "주문을 추출할 수 없습니다."}}), 400
 
-    return jsonify({
-        "data": {
-            "intent": {"query": query, "temperature": temperature, "quantity": quantity},
+    # 각 주문에 대해 메뉴 매칭
+    order_results = []
+    errors = []
+
+    for idx, parsed in enumerate(parsed_orders):
+        query = parsed["query"]
+        quantity = parsed["quantity"]
+        temperature = parsed["temperature"]
+
+        # 메뉴 매칭
+        matched_menu, score = _find_best_menu_match(query)
+        if not matched_menu:
+            errors.append({
+                "index": idx,
+                "query": query,
+                "error": "해당하는 메뉴를 찾지 못했습니다."
+            })
+            continue
+
+        order_results.append({
+            "intent": {
+                "query": query,
+                "temperature": temperature,
+                "quantity": quantity
+            },
             "match": {
                 "menuId": matched_menu.get("id"),
                 "name": matched_menu.get("name"),
@@ -301,9 +385,33 @@ def create_order_from_text():
                 "image": matched_menu.get("image_url"),
                 "temperature": temperature
             },
-            "similarityScore": score
+            "similarityScore": float(score)
+        })
+
+    # 일부 주문만 성공한 경우도 반환 (경고 포함)
+    if not order_results:
+        return jsonify({
+            "error": {
+                "code": "ALL_ORDERS_FAILED",
+                "message": "모든 주문에서 메뉴를 찾지 못했습니다.",
+                "details": errors
+            }
+        }), 404
+
+    response_data = {
+        "data": {
+            "orders": order_results
         }
-    }), 200
+    }
+
+    # 일부 실패한 경우 경고 추가
+    if errors:
+        response_data["warnings"] = {
+            "message": "일부 주문에서 메뉴를 찾지 못했습니다.",
+            "failedOrders": errors
+        }
+
+    return jsonify(response_data), 200
 
 
 # Blueprint 등록
