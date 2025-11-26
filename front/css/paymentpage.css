@@ -74,7 +74,7 @@
 
 .order-list-container {
   background: var(--fg-card);
-  border: 3px solid var(--fg-border);
+  border: 1px solid var(--fg-border);
   border-radius: 32px;
   padding: 36px;
   width: 100%;
@@ -188,7 +188,7 @@
 
 .payment-methods {
   background: var(--fg-card);
-  border: 3px solid var(--fg-border);
+  border: none;
   border-radius: 32px;
   padding: 36px;
   width: 100%;

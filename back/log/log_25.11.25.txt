@@ -1,0 +1,13 @@
+[2025-11-25 20:38:33,114] POST /api/v1/orders/text - raw_text=상큼한 거 추천해 줘
+[2025-11-25 20:38:38,077] POST /api/v1/recommendations - query=상큼한 거, temperature=None, quantity=1, body={'query': '상큼한 거', 'temperature': None, 'quantity': 1}
+[2025-11-25 20:46:19,797] POST /api/v1/orders/text - raw_text=간식 추천해줘
+[2025-11-25 20:51:10,010] POST /api/v1/orders/text - raw_text=간식 추천좀
+[2025-11-25 20:51:11,351] POST /api/v1/orders/text - raw_text=간식 추천좀
+[2025-11-25 20:51:11,481] POST /api/v1/orders/text - raw_text=간식 추천좀
+[2025-11-25 20:51:11,634] POST /api/v1/orders/text - raw_text=간식 추천좀
+[2025-11-25 20:51:14,322] POST /api/v1/recommendations - query=간식 추천, temperature=None, quantity=1, body={'query': '간식 추천', 'temperature': None, 'quantity': 1}
+[2025-11-25 20:51:14,680] POST /api/v1/recommendations - query=간식 추천, temperature=None, quantity=1, body={'query': '간식 추천', 'temperature': None, 'quantity': 1}
+[2025-11-25 20:51:14,930] POST /api/v1/recommendations - query=간식 추천, temperature=None, quantity=1, body={'query': '간식 추천', 'temperature': None, 'quantity': 1}
+[2025-11-25 20:51:15,488] POST /api/v1/recommendations - query=간식 추천, temperature=None, quantity=1, body={'query': '간식 추천', 'temperature': None, 'quantity': 1}
+[2025-11-25 20:51:23,245] POST /api/v1/orders/text - raw_text=간식 추천좀
+[2025-11-25 20:51:25,277] POST /api/v1/recommendations - query=간식 추천, temperature=None, quantity=1, body={'query': '간식 추천', 'temperature': None, 'quantity': 1}

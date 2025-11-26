@@ -9,6 +9,16 @@ from sklearn.metrics.pairwise import cosine_similarity
 from dotenv import load_dotenv
 import os
 import logging
+# DB 기반 시스템으로 전환 완료 - JSON 파일 경로 제거
+
+# 사용자 입력 로깅 설정
+user_input_logger = logging.getLogger("user_input")
+if not user_input_logger.handlers:
+    handler = logging.StreamHandler()
+    formatter = logging.Formatter("[%(asctime)s] %(levelname)s - %(message)s")
+    handler.setFormatter(formatter)
+    user_input_logger.addHandler(handler)
+user_input_logger.setLevel(logging.INFO)
 from supabase import create_client, Client
 
 # 환경 변수 로딩 (.env OPENAI_API_KEY)
@@ -325,6 +335,14 @@ def post_recommendations():
     temperature = body.get("temperature")
     quantity = body.get("quantity", 1)
 
+    user_input_logger.info(
+        "POST /api/v1/recommendations - query=%s, temperature=%s, quantity=%s, body=%s",
+        query,
+        temperature,
+        quantity,
+        body,
+    )
+
     if not query:
         return jsonify({"error": {"code": "VALIDATION_ERROR", "message": "query is required"}}), 400
 
@@ -344,6 +362,7 @@ def create_order_from_text():
     """자연어 입력(예: '아아 2잔 콜라보 한잔')으로 여러 주문을 생성하고 결제 진입 정보를 반환합니다."""
     body = request.get_json(silent=True) or {}
     text = body.get("text")
+    user_input_logger.info("POST /api/v1/orders/text - raw_text=%s", text)
     if not text:
         return jsonify({"error": {"code": "VALIDATION_ERROR", "message": "text is required"}}), 400
 
@@ -440,11 +459,7 @@ if __name__ == '__main__':
     print(f"   http://localhost:5002")
     print(f"\n📡 API 엔드포인트:")
     print(f"   http://localhost:5002/api/v1/menus")
-    print(f"   http://localhost:5002/api/v1/recommendations")
-    print(f"\n🌐 ngrok 사용 시:")
-    print(f"   1. 새 터미널에서 실행: ngrok http 5002")
-    print(f"   2. ngrok에서 제공하는 URL로 접속")
-    print(f"   3. 프론트엔드가 자동으로 ngrok URL을 API 서버로 사용합니다")
+    print(f"   새 터미널에서 실행: ngrok http 5002")
     print("="*60 + "\n")
     
     app.run(host="0.0.0.0", port=5002, debug=True)
