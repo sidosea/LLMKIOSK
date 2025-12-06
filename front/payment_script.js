@@ -42,11 +42,11 @@ $(document).ready(function () {
           <p class="order-item-temp">${tempLabel} x ${item.quantity}</p>
           <div class="order-item-controls">
             <button type="button" class="order-qty-btn" data-name="${name}" data-action="decrease">
-              <img src="https://www.figma.com/api/mcp/asset/69c5e272-ed68-417d-84ec-3738346a0630" alt="감소" />
+              <img src="img/minus.png" alt="감소" />
             </button>
             <span class="order-qty-value">${item.quantity}</span>
             <button type="button" class="order-qty-btn" data-name="${name}" data-action="increase">
-              <img src="https://www.figma.com/api/mcp/asset/1f27a4e2-a4a1-4a1a-9b24-25f5ac240d70" alt="증가" />
+              <img src="img/plus.png" alt="증가" />
             </button>
           </div>
         </div>
